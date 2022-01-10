@@ -40,17 +40,17 @@ public class Kart : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        tex = can.GetComponent<Text>();
+        //tex = can.GetComponent<Text>();
         home = new GameObject();
         self = this.gameObject;
         home.transform.localPosition = self.transform.localPosition;
         home.transform.eulerAngles = self.transform.eulerAngles;
         self = this.gameObject;
-        bod = self.GetComponent<Rigidbody>();
+        //bod = self.GetComponent<Rigidbody>();
     }
 
     // Update is called once per frame
-    void Update()
+    void FixedUpdate()
     {
         if(active)
         {
@@ -76,7 +76,7 @@ public class Kart : MonoBehaviour
         ass.eulerAngles = home.transform.localEulerAngles;
         self.transform.localRotation = ass;
         bod.WakeUp();
-        tex.text = "1/2";
+        //tex.text = "1/2";
     }
     void acccelerating()
     {
@@ -115,7 +115,7 @@ public class Kart : MonoBehaviour
     public void Steer(InputAction.CallbackContext context)
     {
         left_steering = context.ReadValue<Vector2>();
-        print(left_steering);
+        //print(left_steering);
     }
 
     public void testinp(InputAction.CallbackContext context)

@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 366524851119853531}
   - component: {fileID: 366524851119853534}
-  - component: {fileID: 366524851119853533}
   - component: {fileID: 366524851119853532}
   m_Layer: 0
   m_Name: PixelCamera
@@ -76,14 +75,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &366524851119853533
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366524851119853530}
-  m_Enabled: 1
 --- !u!114 &366524851119853532
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -208,8 +199,8 @@ GameObject:
   m_Component:
   - component: {fileID: 366524851963988252}
   - component: {fileID: 366524851963988255}
-  - component: {fileID: 366524851963988254}
   - component: {fileID: 366524851963988253}
+  - component: {fileID: 2154528015980629633}
   m_Layer: 0
   m_Name: Camera
   m_TagString: Untagged
@@ -224,7 +215,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 366524851963988251}
-  m_LocalRotation: {x: 0.043619405, y: 0, z: 0, w: 0.9990483}
+  m_LocalRotation: {x: 0.043619405, y: -0, z: -0, w: 0.9990483}
   m_LocalPosition: {x: 0, y: 5, z: -10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -275,14 +266,6 @@ Camera:
   m_OcclusionCulling: 1
   m_StereoConvergence: 10
   m_StereoSeparation: 0.022
---- !u!81 &366524851963988254
-AudioListener:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 366524851963988251}
-  m_Enabled: 1
 --- !u!114 &366524851963988253
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -397,6 +380,32 @@ MonoBehaviour:
       data1: 0
       data2: 0
   defaultFrameSettings: 0
+--- !u!1773428102 &2154528015980629633
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366524851963988251}
+  m_Enabled: 1
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 5, z: -10}
+  m_RotationAtRest: {x: 5.000002, y: 0, z: 0}
+  m_TranslationOffsets:
+  - {x: 0, y: 5, z: -10}
+  m_RotationOffsets:
+  - {x: 5.000004, y: 0, z: 0}
+  m_AffectTranslationX: 1
+  m_AffectTranslationY: 1
+  m_AffectTranslationZ: 1
+  m_AffectRotationX: 1
+  m_AffectRotationY: 1
+  m_AffectRotationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 5810265242652973692}
+    weight: 1
 --- !u!1 &366524853111476086
 GameObject:
   m_ObjectHideFlags: 0
@@ -406,6 +415,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 366524853111476074}
+  - component: {fileID: 1510431869539419701}
   m_Layer: 0
   m_Name: KartManager
   m_TagString: Untagged
@@ -430,6 +440,108 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1510431869539419701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 366524853111476086}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 41b555d8af35eb544b05058600748f8f, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2891725847325323278}
+        m_TargetAssemblyTypeName: Kart, Assembly-CSharp
+        m_MethodName: Steer
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: f8068a95-465f-4893-97e0-b0736b66607c
+    m_ActionName: Player/Steer[/DualShock4GamepadHID/leftStick]
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 2891725847325323278}
+        m_TargetAssemblyTypeName: Kart, Assembly-CSharp
+        m_MethodName: Accel
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: 5009819f-6b5e-4e76-a1e4-c894f604eb7d
+    m_ActionName: Player/Accel[/DualShock4GamepadHID/rightTrigger]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 43f1ef62-b334-453f-80b6-2cefd895d53a
+    m_ActionName: UI/Navigate[/DualShock4GamepadHID/leftStick/up,/DualShock4GamepadHID/rightStick/up,/DualShock4GamepadHID/leftStick/down,/DualShock4GamepadHID/rightStick/down,/DualShock4GamepadHID/leftStick/left,/DualShock4GamepadHID/rightStick/left,/DualShock4GamepadHID/leftStick/right,/DualShock4GamepadHID/rightStick/right,/DualShock4GamepadHID/dpad]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7869a114-ce5c-48be-8b3f-73db64a2bd11
+    m_ActionName: UI/Submit[/DualShock4GamepadHID/buttonSouth]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c1481722-09ee-4270-a3b3-a5572669d8fc
+    m_ActionName: UI/Cancel[/DualShock4GamepadHID/buttonEast]
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7936294c-67c8-482a-a2df-0219c9d244c9
+    m_ActionName: UI/Point
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 4331fb56-296c-48a7-bb6d-b2df03ad45f2
+    m_ActionName: UI/Click
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 2f55c6c8-e746-4f55-9f5a-cf2edae62866
+    m_ActionName: UI/ScrollWheel
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: fd472be8-582e-4657-9981-9bbdb588df45
+    m_ActionName: UI/MiddleClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 8d492d4f-f291-42e5-a909-5e548624967f
+    m_ActionName: UI/RightClick
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3fcb5be0-8121-4fe6-9219-b9699a3070a3
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: f409c32a-81be-4638-8c85-b2c620630e4b
+    m_ActionName: UI/TrackedDeviceOrientation
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: Gamepad
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1454780298195223964
 GameObject:
   m_ObjectHideFlags: 0
@@ -442,6 +554,7 @@ GameObject:
   - component: {fileID: 5489376675256920147}
   - component: {fileID: 1588146638769585088}
   - component: {fileID: 2891725847325323278}
+  - component: {fileID: 4632863526410411626}
   m_Layer: 0
   m_Name: Kart
   m_TagString: Untagged
@@ -456,7 +569,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1454780298195223964}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
@@ -506,8 +619,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66eeb856d93278e46be98dc77feb3d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  self: {fileID: 0}
-  bod: {fileID: 0}
+  self: {fileID: 1454780298195223964}
+  bod: {fileID: 5489376675256920147}
   can: {fileID: 0}
   tex: {fileID: 0}
   acceleration: 0
@@ -520,8 +633,34 @@ MonoBehaviour:
   driftTime: 0
   lap: 1
   min_turn: 1
-  turn_speed: 3
-  active: 0
+  turn_speed: 1
+  active: 1
+--- !u!1773428102 &4632863526410411626
+ParentConstraint:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1454780298195223964}
+  m_Enabled: 1
+  m_Weight: 1
+  m_TranslationAtRest: {x: 0, y: 0, z: 0}
+  m_RotationAtRest: {x: 0, y: 0, z: 0}
+  m_TranslationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_RotationOffsets:
+  - {x: 0, y: 0, z: 0}
+  m_AffectTranslationX: 0
+  m_AffectTranslationY: 0
+  m_AffectTranslationZ: 0
+  m_AffectRotationX: 0
+  m_AffectRotationY: 0
+  m_AffectRotationZ: 1
+  m_IsContraintActive: 1
+  m_IsLocked: 1
+  m_Sources:
+  - sourceTransform: {fileID: 366524853111476074}
+    weight: 1
 --- !u!1 &1480943131450317603
 GameObject:
   m_ObjectHideFlags: 0
