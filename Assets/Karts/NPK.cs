@@ -18,6 +18,7 @@ public class NPK : MonoBehaviour
     public Vector3 target;
     public Rigidbody bod;
     public GameObject wabbit;
+    public GameObject caster;
 
     //acceleration vars
     public float acceleration = 0.0f;
@@ -53,9 +54,9 @@ public class NPK : MonoBehaviour
     {
         //bod.AddForce();
         wait += Time.deltaTime;
-        pos = transform.position;
+        pos = caster.transform.position;
         difff = transform.InverseTransformPoint(wabbit.transform.position);
-        if (wait > .3)
+        if (wait > .5)
         {
             update_directions();
             debug_rays();
@@ -63,6 +64,7 @@ public class NPK : MonoBehaviour
             find_direction();
             wait = 0;
         }
+        turn = difff.normalized;
         acceleration = Mathf.Abs(difff.normalized.z) * max_accel;
         if (!clearDirs.Contains(F)) {
             acceleration = 0;
@@ -144,15 +146,15 @@ public class NPK : MonoBehaviour
 
     void update_directions()
     {
-        F = transform.TransformDirection(Vector3.forward * rayLength);
-        N = transform.TransformDirection(Vector3.up * rayLength);
-        S = transform.TransformDirection(Vector3.down * rayLength);
-        E = transform.TransformDirection(Vector3.right * rayLength);
-        W = transform.TransformDirection(Vector3.left * rayLength);
-        NE = transform.TransformDirection((Vector3.forward + Vector3.up + Vector3.right) * rayLength);
-        NW = transform.TransformDirection((Vector3.forward + Vector3.up + Vector3.left) * rayLength);
-        SE = transform.TransformDirection((Vector3.forward + Vector3.down + Vector3.right) * rayLength);
-        SW = transform.TransformDirection((Vector3.forward + Vector3.down + Vector3.left) * rayLength);
+        F = caster.transform.TransformDirection(Vector3.forward * rayLength);
+        N = caster.transform.TransformDirection(Vector3.up * rayLength);
+        S = caster.transform.TransformDirection(Vector3.down * rayLength);
+        E = caster.transform.TransformDirection(Vector3.right * rayLength);
+        W = caster.transform.TransformDirection(Vector3.left * rayLength);
+        NE = caster.transform.TransformDirection((Vector3.forward + Vector3.up + Vector3.right) * rayLength);
+        NW = caster.transform.TransformDirection((Vector3.forward + Vector3.up + Vector3.left) * rayLength);
+        SE = caster.transform.TransformDirection((Vector3.forward + Vector3.down + Vector3.right) * rayLength);
+        SW = caster.transform.TransformDirection((Vector3.forward + Vector3.down + Vector3.left) * rayLength);
         directions =  new Vector3[] { F, N, NE, NW, E, SE, S, SW, W };
         clearDirs.Clear();
         foreach (Vector3 direction in directions) {
@@ -173,7 +175,7 @@ public class NPK : MonoBehaviour
         {
             min = clearDirs[0];
             distances.Clear();
-            foreach (Vector3 dir in clearDirs)
+            foreach (Vector3 dir in directions)
             {
                 distances.Add(Vector3.Distance(difff, dir));
                 if (Vector3.Distance(difff, min) > Vector3.Distance(difff, dir))
@@ -192,15 +194,15 @@ public class NPK : MonoBehaviour
 
     void debug_rays()
     {
-        Debug.DrawRay(pos, NW);
-        Debug.DrawRay(pos, NE);
-        Debug.DrawRay(pos, SE);
-        Debug.DrawRay(pos, SW);
-        Debug.DrawRay(pos, W);
-        Debug.DrawRay(pos, E);
-        Debug.DrawRay(pos, N);
-        Debug.DrawRay(pos, S);
-        Debug.DrawRay(pos, F);
+        Debug.DrawRay(pos, NW, Color.red, wait);
+        Debug.DrawRay(pos, NE, Color.red, wait);
+        Debug.DrawRay(pos, SE, Color.red, wait);
+        Debug.DrawRay(pos, SW, Color.red, wait);
+        Debug.DrawRay(pos, W, Color.red, wait);
+        Debug.DrawRay(pos, E, Color.red, wait);
+        Debug.DrawRay(pos, N, Color.red, wait);
+        Debug.DrawRay(pos, S, Color.red, wait);
+        Debug.DrawRay(pos, F, Color.red, wait);
     }
 
 }
