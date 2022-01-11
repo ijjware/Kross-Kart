@@ -27,6 +27,7 @@ public class Kart : MonoBehaviour
     public float driftTime = 0f;
 
     private Vector2 left_steering;
+    private float roll;
     private GameObject home;
     public int lap = 1;
 
@@ -142,39 +143,36 @@ public class Kart : MonoBehaviour
 
     void drift_kart()
     {
-        Vector3 rot = self.transform.rotation.eulerAngles;
+        
+        Vector3 rot = self.transform.localRotation.eulerAngles;
         Quaternion but = new Quaternion();
         float amt = left_steering.x * (driftTurn + (turn_speed * (max_accel - acceleration) / max_accel));
         rot.y += amt;
         amt = left_steering.y * (driftTurn + (turn_speed * (max_accel - acceleration) / max_accel));
         rot.x += -amt;
         but.eulerAngles = rot;
-        self.transform.rotation = but;
+        self.transform.localRotation = but;
         driftTime += Time.deltaTime;
         bod.AddForce(move, ForceMode.Acceleration);
     }
 
     void move_kart()
     {
-        Vector3 rot = self.transform.rotation.eulerAngles;
-        //Vector3 frontpos = front.transform.position;
+        //transform.TransformDirection(Vector3.forward
+        //transform.rotation.SetLookRotation(transform.TransformDirection(Vector3.forward), transform.TransformDirection(Vector3.up));
+        //Vector3 rot = self.transform.rotation.eulerAngles;
+        Vector3 rot = transform.TransformDirection(Vector3.forward);
         Quaternion but = new Quaternion();
-
-        //rot.y = rot.y + ang;
+        //but.SetLookRotation(transform.InverseTransformDirection(Vector3.forward), transform.InverseTransformDirection(Vector3.up));
         float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
-        //print(amt);
         rot.y += amt;
         amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
-        //if (acceleration < max_accel) {amt = (left_steering * turn_speed) * ((max_accel - acceleration)/max_accel); }
-        //else { amt = left_steering * min_turn;}
-        //rot.y += left_steering.x;
         rot.x += -amt;
+        rot.z += roll*10;
         but.eulerAngles = rot;
-        transform.rotation = but;
-        //Vector3 move = Vector3.Lerp(kartpos, frontpos, acceleration);
+        transform.rotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.forward), rot);
         move.z = acceleration;
         bod.AddRelativeForce(move, ForceMode.Acceleration);
-        //self.transform.position = move;
     }
 
     public void driift(InputAction.CallbackContext context)
@@ -208,5 +206,15 @@ public class Kart : MonoBehaviour
             print("undrift");
             drifting = false;
         }
+    }
+
+    public void rollR(InputAction.CallbackContext context)
+    {
+        roll = -context.ReadValue<float>();
+    }
+
+    public void rollL(InputAction.CallbackContext context)
+    {
+        roll = context.ReadValue<float>();
     }
 }
