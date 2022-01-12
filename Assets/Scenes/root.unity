@@ -128,6 +128,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1454780298195223964, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
   m_PrefabInstance: {fileID: 542622730}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &54872650 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2891725847325323278, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+  m_PrefabInstance: {fileID: 542622730}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 54872649}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 66eeb856d93278e46be98dc77feb3d05, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!54 &54872652 stripped
 Rigidbody:
   m_CorrespondingSourceObject: {fileID: 5489376675256920147, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
@@ -296,6 +307,82 @@ PrefabInstance:
       propertyPath: m_Name
       value: KartManager
       objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.size
+      value: 14
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_ActionId
+      value: ee3ffbf6-b7d2-4195-a79f-5f8e170ed6ca
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionId
+      value: 14e1dfa6-a74b-40c8-b72b-a5ff2f517f4b
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_ActionName
+      value: Player/RollR[/DualShock4GamepadHID/rightShoulder]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_ActionName
+      value: Player/RollL[/DualShock4GamepadHID/leftShoulder]
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.size
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_Mode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 54872650}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 54872650}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_CallState
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: rollR
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: rollL
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Kart, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: Kart, Assembly-CSharp
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[12].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
+    - target: {fileID: 1510431869539419701, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_ActionEvents.Array.data[13].m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
+      value: UnityEngine.Object, UnityEngine
+      objectReference: {fileID: 0}
     - target: {fileID: 1588146638769585088, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
       propertyPath: m_Material
       value: 
@@ -313,7 +400,19 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 2891725847325323278, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: min_turn
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2891725847325323278, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: max_accel
+      value: 500
+      objectReference: {fileID: 0}
+    - target: {fileID: 2891725847325323278, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
       propertyPath: turn_speed
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 4632863526410411626, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
+      propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5489376675256920147, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
@@ -437,6 +536,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 1638405854734721730, guid: eb683cfa236221648b24726b15c10849, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 1638405854734721730, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: m_Sources.Array.size
       value: 1
       objectReference: {fileID: 0}
@@ -513,12 +616,24 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 313952680}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
+      propertyPath: min_turn
+      value: 0.01
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
+      propertyPath: max_accel
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: rayLength
       value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
+      propertyPath: rate_accel
+      value: 0.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: turn_speed
-      value: 1
+      value: 0.01
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb683cfa236221648b24726b15c10849, type: 3}

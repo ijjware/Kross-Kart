@@ -68,7 +68,7 @@ public class NPK : MonoBehaviour
         }
         
         //turn = difff.normalized;
-        acceleration = Mathf.Abs(difff.normalized.z) * max_accel;
+        acceleration = Mathf.Abs(max) * max_accel;
         //if (!clearDirs.Contains(F)) {
         //    acceleration = 0;
         //}
@@ -82,11 +82,11 @@ public class NPK : MonoBehaviour
         Vector3 rot = transform.rotation.eulerAngles;
         Quaternion but = new Quaternion();
         float amt = turn.x * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
-        rot.y += amt;
+        rot.y = amt;
         amt = turn.y * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
-        rot.x += amt;
-        but.eulerAngles = rot;
-        transform.rotation = but;
+        rot.x = -amt;
+        //but.eulerAngles = rot;
+        transform.Rotate(rot.x, rot.y, 0, Space.Self);
         move.z = acceleration;
         bod.AddRelativeForce(move, ForceMode.Acceleration);
     }
@@ -197,7 +197,7 @@ public class NPK : MonoBehaviour
         int index = 0;
         var veck = new Vector3(0, 0, rayLength);
         var veck2 = new Vector3(0, 0, 0);
-        float avgDistance = 0f;
+        float maxDistance = 0f;
         RaycastHit info;
         distances.Clear();
         while (index < 4)
@@ -206,36 +206,42 @@ public class NPK : MonoBehaviour
             {
                 case 0:
                     //up
-                    veck2.y = 1.5f;
+                    veck2.y = 1;
                     break;
                 case 1:
                     //down
-                    veck2.y = -1.5f;
+                    veck2.y = -1;
                     break;
                 case 2:
                     //right
-                    veck2.x = 1.5f;
+                    veck2.x = 1f;
                     break;
                 case 3:
                     //left
-                    veck2.x = -1.5f;
+                    veck2.x = -1f;
                     break;
                 default:
                     break;
             }
-            for(int i = 0; i < 19; i++)
+            
+            for(int i = 0; i < 20; i++)
             {
                 veck += veck2;
-                Physics.Raycast(pos, transform.TransformDirection(veck), out info);
-                avgDistance += info.distance;
+                Physics.Raycast(pos, transform.TransformDirection(veck * i), out info);
+                Debug.DrawLine(pos, info.point, Color.yellow, 1f);
+                if (maxDistance < info.distance)
+                {
+                    maxDistance = info.distance;
+                }
             }
-            distances.Add(avgDistance / 20);
-            avgDistance = 0;
+            distances.Add(maxDistance);
+            maxDistance = 0;
             veck = new Vector3(0, 0, rayLength);
             veck2 = new Vector3(0, 0, 0);
             index++;
         }
         Physics.Raycast(pos, transform.TransformDirection(veck), out info);
+        Debug.DrawLine(pos, info.point, Color.yellow, 1f);
         distances.Add(info.distance);
 
     }

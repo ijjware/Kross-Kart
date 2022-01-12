@@ -158,19 +158,24 @@ public class Kart : MonoBehaviour
 
     void move_kart()
     {
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * 10), Color.red, 1f);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up * 10), Color.red, 1f);
         //transform.TransformDirection(Vector3.forward
         //transform.rotation.SetLookRotation(transform.TransformDirection(Vector3.forward), transform.TransformDirection(Vector3.up));
-        //Vector3 rot = self.transform.rotation.eulerAngles;
-        Vector3 rot = transform.TransformDirection(Vector3.forward);
+        Vector3 rot = self.transform.position;
+        //Vector3 rot = transform.TransformDirection(Vector3.forward);
         Quaternion but = new Quaternion();
         //but.SetLookRotation(transform.InverseTransformDirection(Vector3.forward), transform.InverseTransformDirection(Vector3.up));
         float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
-        rot.y += amt;
+        rot.y = amt;
         amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
-        rot.x += -amt;
-        rot.z += roll*10;
+        rot.x = -amt;
+        rot.z = roll ;
+
         but.eulerAngles = rot;
-        transform.rotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.forward), rot);
+        //transform.LookAt(rot, transform.TransformDirection(Vector3.up));
+        transform.Rotate(rot.x, rot.y, rot.z, Space.Self);
+        //transform.rotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.forward), rot);
         move.z = acceleration;
         bod.AddRelativeForce(move, ForceMode.Acceleration);
     }
