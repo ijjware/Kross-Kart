@@ -28,7 +28,7 @@ public class TrackBase : MonoBehaviour
         int size = 0;
         foreach(GameObject check in checks)
         {
-            print(check.name);
+            //print(check.name);
             if (check != null) { size += 1;}
         }
         GameObject[] newchex = new GameObject[size];

@@ -122,7 +122,7 @@ NavMeshSettings:
     preserveTilesOutsideBounds: 0
     debug:
       m_Flags: 0
-  m_NavMeshData: {fileID: 0}
+  m_NavMeshData: {fileID: 23800000, guid: e92456e08c36e9d488976bbd9110fa26, type: 2}
 --- !u!1 &54872649 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1454780298195223964, guid: fccf2eb48ec93de4cb5014631c8feab4, type: 3}
@@ -172,7 +172,7 @@ BoxCollider:
   m_GameObject: {fileID: 313952680}
   m_Material: {fileID: 0}
   m_IsTrigger: 0
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 2
   m_Size: {x: 1, y: 1, z: 1}
   m_Center: {x: 0, y: 0, z: 0}
@@ -537,7 +537,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1638405854734721730, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: m_Enabled
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1638405854734721730, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: m_Sources.Array.size
@@ -565,7 +565,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309384, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 35
+      value: 39.1
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309384, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: m_LocalPosition.z
@@ -617,11 +617,11 @@ PrefabInstance:
       objectReference: {fileID: 313952680}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: min_turn
-      value: 0.01
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: max_accel
-      value: 0.5
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: rayLength
@@ -629,11 +629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: rate_accel
-      value: 0.1
+      value: 10
       objectReference: {fileID: 0}
     - target: {fileID: 7365784386226309399, guid: eb683cfa236221648b24726b15c10849, type: 3}
       propertyPath: turn_speed
-      value: 0.01
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: eb683cfa236221648b24726b15c10849, type: 3}
@@ -669,6 +669,10 @@ PrefabInstance:
       propertyPath: dad
       value: 
       objectReference: {fileID: 5061292142318580567}
+    - target: {fileID: 7335083698607707709, guid: 708c14fd43185e44c9e493b850b289b1, type: 3}
+      propertyPath: m_StaticEditorFlags
+      value: 4294967295
+      objectReference: {fileID: 0}
     - target: {fileID: 8085037879556695849, guid: 708c14fd43185e44c9e493b850b289b1, type: 3}
       propertyPath: m_RootOrder
       value: 0
