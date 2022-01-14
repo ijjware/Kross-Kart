@@ -220,7 +220,7 @@ public class NPK : MonoBehaviour
             //print(info.distance);
         }
 
-        if (buffer > 100)
+        if (buffer > 200)
         {
             if (acceleration < max_accel)
             {
@@ -228,12 +228,12 @@ public class NPK : MonoBehaviour
                 if (acceleration > max_accel) { acceleration = max_accel; }
             }
 
-        }else if ( buffer > 10)
+        }else if ( buffer > 100)
         {
             if (acceleration > (max_accel/10))
             {
                 acceleration -= rate_accel;
-                if (acceleration < (max_accel / 10)) { acceleration = 0; }
+                if (acceleration < 0) { acceleration = 0; }
             }
         }
         else
@@ -253,9 +253,10 @@ public class NPK : MonoBehaviour
     {
        if (!Physics.Linecast(transform.position, wabbit.transform.position))
         {
+            Debug.DrawLine(transform.position, wabbit.transform.position);
             turn.x = Mathf.Sign(difff.x);
             turn.y = Mathf.Sign(difff.y);
-        }
+        } else { Debug.DrawLine(transform.position, wabbit.transform.position, Color.red); }
     }
 
     void update_directions()

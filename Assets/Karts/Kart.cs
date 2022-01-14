@@ -79,6 +79,7 @@ public class Kart : MonoBehaviour
         bod.WakeUp();
         //tex.text = "1/2";
     }
+
     void acccelerating()
     {
         if (accelerating)
