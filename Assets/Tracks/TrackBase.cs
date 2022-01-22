@@ -75,9 +75,6 @@ public class TrackBase : MonoBehaviour
                         }
                         KartCheck = 1;
                     }
-
-                    //print(point.name);
-                    //point.lightBarch();
                     KartCheck += 1;
                     if (KartCheck > numChecks) { KartCheck = 0; }
                 }

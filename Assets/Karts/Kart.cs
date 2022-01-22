@@ -15,15 +15,22 @@ public class Kart : MonoBehaviour
     //acceleration vars
     private bool accelerating = false;
     public float acceleration = 0.0f;
-    public float rate_accel = 10f;
-    public float max_accel = 500f;
+    public float rate_accel = 1f;
+    public float max_accel = 25f;
 
+    //boost vars
+    public float boostStrength = 50f;
+    private float boost = 0f;
+    public int boostAmt = 0;
+    private bool boosting = false;
+    
     //drift idk
     private bool drifting = false;
     public float driftAccel = 0f;
     public float driftTurn = 2;
-    public float boost = 700f;
+    public float driftBoost = 3000;
     public Vector3 move = new Vector3(0, 0, 0);
+    public Vector3 drift = new Vector3(0, 0, 0);
     public float driftTime = 0f;
 
     private Vector2 left_steering;
@@ -32,11 +39,12 @@ public class Kart : MonoBehaviour
     public int lap = 1;
 
     //turning vars
-    public float min_turn = 1;
-    public float turn_speed = 3;
+    public float min_turn = 125;
+    public float turn_speed = 200;
 
     //big bool
     public bool active = false;
+    private int layermask = 1 << 10;
 
     // Start is called before the first frame update
     void Start()
@@ -53,17 +61,20 @@ public class Kart : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if(active)
-        {
-            acccelerating();
-            move_kart();
-        }
+        //RaycastHit info;
+        //if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down * 10), out info, 30, layermask))
+        //{
+        //    boostAmt += 100;
+        //    print("boost get");
+        //    info.collider.SendMessage("get");
+        //}
         if (drifting)
         {
             drift_kart();
         } else
         {
             acccelerating();
+            booosting();
             move_kart();
         }
         
@@ -89,7 +100,6 @@ public class Kart : MonoBehaviour
                 acceleration += rate_accel;
                 if (acceleration > max_accel) { acceleration = max_accel; }
             }
-
         }
         else
         {
@@ -98,7 +108,6 @@ public class Kart : MonoBehaviour
                 acceleration -= rate_accel;
                 if (acceleration < 0) { acceleration = 0; }
             }
-
         }
     }
 
@@ -120,11 +129,6 @@ public class Kart : MonoBehaviour
         //print(left_steering);
     }
 
-    public void testinp(InputAction.CallbackContext context)
-    {
-       // print(context.ReadValue<Vector2>());
-    }
-
     public void set_lap()
     {
         switch (lap)
@@ -139,74 +143,62 @@ public class Kart : MonoBehaviour
                 break;
             default: break;
         }
-
     }
 
     void drift_kart()
     {
-        
         Vector3 rot = self.transform.localRotation.eulerAngles;
-        Quaternion but = new Quaternion();
-        float amt = left_steering.x * (driftTurn + (turn_speed * (max_accel - acceleration) / max_accel));
-        rot.y += amt;
-        amt = left_steering.y * (driftTurn + (turn_speed * (max_accel - acceleration) / max_accel));
-        rot.x += -amt;
-        but.eulerAngles = rot;
-        self.transform.localRotation = but;
+        float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + driftTurn);
+        rot.y = amt;
+        amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + driftTurn);
+        rot.x = -amt;
+        rot.z = roll * 100;
+        Quaternion deltaRotation = Quaternion.Euler(rot * Time.fixedDeltaTime);
+        bod.MoveRotation(bod.rotation * deltaRotation);
         driftTime += Time.deltaTime;
-        bod.AddForce(move, ForceMode.Acceleration);
+        bod.AddForce(drift, ForceMode.VelocityChange);
     }
 
     void move_kart()
     {
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * 10), Color.red, 1f);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up * 10), Color.red, 1f);
-        //transform.TransformDirection(Vector3.forward
-        //transform.rotation.SetLookRotation(transform.TransformDirection(Vector3.forward), transform.TransformDirection(Vector3.up));
-        Vector3 rot = self.transform.position;
-        //Vector3 rot = transform.TransformDirection(Vector3.forward);
-        Quaternion but = new Quaternion();
-        //but.SetLookRotation(transform.InverseTransformDirection(Vector3.forward), transform.InverseTransformDirection(Vector3.up));
-        float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down * 10), Color.red, 1f);
+        Vector3 rot;
+        float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + boost);
         rot.y = amt;
-        amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / max_accel));
+        amt = left_steering.y * (min_turn + (turn_speed * ( max_accel - acceleration) / (max_accel * 200)) + boost);
         rot.x = -amt;
-        rot.z = roll ;
-
-        but.eulerAngles = rot;
-        //transform.LookAt(rot, transform.TransformDirection(Vector3.up));
-        transform.Rotate(rot.x, rot.y, rot.z, Space.Self);
-        //transform.rotation = Quaternion.FromToRotation(transform.TransformDirection(Vector3.forward), rot);
-        move.z = acceleration;
-        bod.AddRelativeForce(move, ForceMode.Acceleration);
+        rot.z = roll * 100;
+        Quaternion deltaRotation = Quaternion.Euler(rot * Time.fixedDeltaTime); 
+        bod.MoveRotation(bod.rotation * deltaRotation);
+        move.z = acceleration + boost;
+        if (move.z > 50) { move.z = 50; }
+        bod.AddRelativeForce(move, ForceMode.VelocityChange);
+        boost = 0f;
     }
 
     public void driift(InputAction.CallbackContext context)
     {
-        
         bool btn = context.ReadValueAsButton();
-        //Debug.Log(context.ReadValueAsButton());
         if (btn)
         {
             move.z = acceleration;
+            drift = transform.TransformDirection(move);
             print("driftu");
-            move = transform.TransformDirection(move);
             drifting = true;
         }
         else
         {
-            move.y = 0;
-            move.x = 0;
             if (driftTime >= 1.5f)
             {
-                move.z = 700f;
-                bod.AddRelativeForce(move, ForceMode.Impulse);
+                move.z = driftBoost;
+                bod.AddRelativeForce(move, ForceMode.VelocityChange);
             } else if (driftTime >= 1f) {
-                move.z = 450;
-                bod.AddRelativeForce(move, ForceMode.Impulse);
+                move.z = driftBoost/2;
+                bod.AddRelativeForce(move, ForceMode.VelocityChange);
             } else if (driftTime >= 0.5f) {
-                move.z = 200;
-                bod.AddRelativeForce(move, ForceMode.Impulse);
+                move.z = driftBoost/3;
+                bod.AddRelativeForce(move, ForceMode.VelocityChange);
             }
             driftTime = 0;
             print("undrift");
@@ -222,5 +214,42 @@ public class Kart : MonoBehaviour
     public void rollL(InputAction.CallbackContext context)
     {
         roll = context.ReadValue<float>();
+    }
+
+    public void booosting()
+    {
+        if (boosting && boostAmt > 0)
+        {
+
+            boost = boostStrength;
+            boostAmt -= 1;
+            //infinite boost line
+            //boostAmt += 1;
+        } else if (boostAmt == 0)
+        {
+            print("boost empty");
+            boostAmt = -1;
+        }
+    }
+
+    public void get_boost()
+    {
+        boostAmt += 100;
+        print("boost get");
+        //info.collider.SendMessage("get");
+    }
+
+    public void booost(InputAction.CallbackContext context)
+    {
+        bool btn = context.ReadValueAsButton();
+        //Debug.Log(context.ReadValueAsButton());
+        if (btn)
+        {
+            boosting = true;
+        }
+        else
+        {
+            boosting = false;
+        }
     }
 }

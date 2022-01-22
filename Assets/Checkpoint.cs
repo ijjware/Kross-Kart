@@ -12,6 +12,7 @@ public class Checkpoint : MonoBehaviour
     {
         self = this.gameObject;
     }
+    
     private void OnTriggerEnter(Collider other)
     {
         dad.checkcheck(other, self);
