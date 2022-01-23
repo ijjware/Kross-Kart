@@ -77,7 +77,6 @@ public class Kart : MonoBehaviour
             booosting();
             move_kart();
         }
-        
     }
 
     public void GoHome()
@@ -220,7 +219,6 @@ public class Kart : MonoBehaviour
     {
         if (boosting && boostAmt > 0)
         {
-
             boost = boostStrength;
             boostAmt -= 1;
             //infinite boost line
