@@ -125,7 +125,7 @@ public class OneMan : MonoBehaviour
 
     void win_msg()
     {
-        kart.tex.text = "Goodbye, My Love!";
+        //kart.tex.text = "Goodbye, My Love!";
     }
 
 }

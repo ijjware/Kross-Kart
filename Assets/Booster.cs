@@ -35,7 +35,6 @@ public class Booster : MonoBehaviour
         box.enabled = false;
         icon.enabled = false;
         time = 0;
-
     }
 
     private void get()

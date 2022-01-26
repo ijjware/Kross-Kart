@@ -15,9 +15,9 @@ TagManager:
   - 
   - PostProcessing
   - Not in Reflection
-  - Ignore Non Raycast
-  - 
-  - 
+  - Boost pickup
+  - Karts only
+  - Walls
   - 
   - 
   - 
