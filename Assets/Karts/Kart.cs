@@ -68,7 +68,6 @@ public class Kart : MonoBehaviour
         if (!active) { return; }
         if (isDriftBoosting && driftTime > 0)
         {
-            
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, 30, layermask))
             {
                 //info.collider.SendMessage("stick");
@@ -244,13 +243,12 @@ public class Kart : MonoBehaviour
         if (boosting && boostAmt > 0)
         {
             layermask = 1 << 12;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, Mathf.Infinity, layermask))
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward * 3), out info, Mathf.Infinity, layermask))
             {
                 print("bonk");
                 //hits a wall
                 if (info.distance < 30)
                 {
-                    
                     layermask = 1 << 11;
                     return;
                 }
