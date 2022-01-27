@@ -27,7 +27,7 @@ public class Kart : MonoBehaviour
     private bool boosting = false;
     
     //drift idk
-    private bool drifting = false;
+    public bool drifting = false;
     public float driftAccel = 0f;
     public float driftTurn = 100;
     public float driftBoost = 3000;
@@ -65,7 +65,9 @@ public class Kart : MonoBehaviour
     void FixedUpdate()
     {
         RaycastHit info;
+     
         if (!active) { return; }
+        //magnetizer
         if (isDriftBoosting && driftTime > 0)
         {
             if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, 30, layermask))
@@ -192,6 +194,8 @@ public class Kart : MonoBehaviour
 
     public void driift(InputAction.CallbackContext context)
     {
+        RaycastHit info;
+
         bool btn = context.ReadValueAsButton();
         if (btn)
         {
@@ -204,7 +208,24 @@ public class Kart : MonoBehaviour
         }
         else
         {
-            if (driftTime >= 1.5f)
+            isDriftBoosting = true;
+            layermask = 1 << 12;
+            Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, Mathf.Infinity, layermask);
+            //hits a wall
+            if (!info.collider)
+            {
+                isDriftBoosting = false;
+                drifting = false;
+                driftCam.Priority = 9;
+                return;
+            }
+            if (info.collider && info.distance < 30)
+            {
+                print("bonk" + info.collider.name);
+                layermask = 1 << 11;
+                isDriftBoosting = false;
+                driftTime = 0;
+            } else if (driftTime >= 1.5f)
             {
                 move.z = driftBoost;
                 bod.AddRelativeForce(move, ForceMode.VelocityChange);
@@ -218,7 +239,7 @@ public class Kart : MonoBehaviour
                 bod.AddRelativeForce(move, ForceMode.VelocityChange);
                 driftTime = driftBoostDuration/3;
             }
-            isDriftBoosting = true;
+            layermask = 1 << 11;
             //driftTime = 0;
             print("undrift");
             drifting = false;
@@ -236,24 +257,15 @@ public class Kart : MonoBehaviour
         roll = context.ReadValue<float>();
     }
 
+    // pickup boost effect
     public void booosting()
     {
-        RaycastHit info;
+        //RaycastHit info;
         
         if (boosting && boostAmt > 0)
         {
-            layermask = 1 << 12;
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward * 3), out info, Mathf.Infinity, layermask))
-            {
-                print("bonk");
-                //hits a wall
-                if (info.distance < 30)
-                {
-                    layermask = 1 << 11;
-                    return;
-                }
-            }
-            layermask = 1 << 11;
+            
+            //layermask = 1 << 11;
             boost = boostStrength;
             boostAmt -= 1;
             //infinite boost line

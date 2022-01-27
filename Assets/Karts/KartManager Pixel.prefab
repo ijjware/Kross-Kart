@@ -77,10 +77,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 66eeb856d93278e46be98dc77feb3d05, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  self: {fileID: 669012424736231757}
   bod: {fileID: 5861024491396725890}
-  can: {fileID: 0}
-  tex: {fileID: 0}
+  mainCam: {fileID: 2123629435259663692}
+  driftCam: {fileID: 2123629434829313819}
+  enem: {fileID: 0}
+  boostMeter: {fileID: 1513065441330845326}
   acceleration: 0
   rate_accel: 1
   max_accel: 25
@@ -89,9 +90,11 @@ MonoBehaviour:
   driftAccel: 0
   driftTurn: 100
   driftBoost: 3000
+  isDriftBoosting: 0
   move: {x: 0, y: 0, z: 0}
   drift: {x: 0, y: 0, z: 0}
   driftTime: 0
+  driftBoostDuration: 0.5
   lap: 1
   min_turn: 125
   turn_speed: 200
@@ -355,9 +358,9 @@ MonoBehaviour:
   m_HandleRect: {fileID: 1513065441139660304}
   m_Direction: 0
   m_MinValue: 0
-  m_MaxValue: 1
+  m_MaxValue: 200
   m_WholeNumbers: 0
-  m_Value: 1
+  m_Value: 0
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
@@ -419,7 +422,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 0
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 1
   m_TargetDisplay: 0
 --- !u!114 &1513065441341509850
 MonoBehaviour:
@@ -859,18 +862,6 @@ MonoBehaviour:
           m_ObjectArgument: {fileID: 0}
           m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
           m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 2123629434829313819}
-        m_TargetAssemblyTypeName: Cinemachine.CinemachineVirtualCameraBase, Cinemachine
-        m_MethodName: set_Priority
-        m_Mode: 3
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 11
           m_FloatArgument: 0
           m_StringArgument: 
           m_BoolArgument: 0
