@@ -3,19 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
-using Cinemachine;
-
+using Photon.Realtime;
+using Photon.Pun;
+using UnityEngine.Animations;
 
 public class Kart : MonoBehaviour
 {
     public Rigidbody bod;
-    public CinemachineVirtualCamera mainCam;
-    public CinemachineVirtualCamera driftCam;
-    public Kart enem;
-    public Slider boostMeter;
+    public PhotonView enem;
+    public PhotonView view;
+    public GameObject you;
+
+    enum DriftMethod { relative, absolute }
+    [SerializeField]
+    DriftMethod driMethod = DriftMethod.absolute;
+    enum BurstMethod { auto, manual}
+    [SerializeField]
+    BurstMethod buMethod = BurstMethod.manual;
 
     //acceleration vars
-    private bool accelerating = false;
     public float acceleration = 0.0f;
     public float rate_accel = 1f;
     public float max_accel = 25f;
@@ -23,87 +29,149 @@ public class Kart : MonoBehaviour
     //boost vars
     public float boostStrength = 50f;
     private float boost = 0f;
-    public int boostAmt = 0;
-    private bool boosting = false;
+    public float fuelAmt = 0;
     
     //drift idk
-    public bool drifting = false;
     public float driftAccel = 0f;
     public float driftTurn = 100;
-    public float driftBoost = 3000;
-    public bool isDriftBoosting = false;
+    public float driftTime = 0f;
+
+    //burst vars
+    public float burstAmt = 1500;
+    public bool isBursting = false;
     public Vector3 move = new Vector3(0, 0, 0);
     public Vector3 drift = new Vector3(0, 0, 0);
-    public float driftTime = 0f;
-    public float driftBoostDuration = 0.5f;
-
-    private Vector2 left_steering;
-    private float roll;
-    private GameObject home;
-    public int lap = 1;
+    public float burstTime = 0f;
+    public float burstDuration = 0.5f;
 
     //turning vars
     public float min_turn = 125;
     public float turn_speed = 200;
 
     //big bool
-    public bool active = false;
-    private int layermask = 1 << 11;
+    public bool active = true;
+    private Maestro master;
+    private int layermask = 0;
+    public int team = 2;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //tex = can.GetComponent<Text>();
-        home = new GameObject();
-        //home.transform.localPosition = self.transform.localPosition;
-        //home.transform.eulerAngles = self.transform.eulerAngles;
-        //self = this.gameObject;
-        //bod = self.GetComponent<Rigidbody>();
-    }
+    //flag vars
+    public bool isHoldingFlag = false;
+    public Flag flag;
+
+    //input vars
+    public bool accelerating = false;
+    public bool drifting = false;
+    public Vector2 left_steering;
+    public float roll;
+    public bool boosting = false;
+
+    //magnet vars
+    public bool stuck = false;
+    private float maxStuckTime = 5f;
+    private float minStuckTime = 1f;
+    public int mashInputs = 0;
 
     // Update is called once per frame
     void FixedUpdate()
     {
-        RaycastHit info;
-     
-        if (!active) { return; }
-        //magnetizer
-        if (isDriftBoosting && driftTime > 0)
-        {
-            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, 30, layermask))
-            {
-                //info.collider.SendMessage("stick");
-                enem = info.collider.GetComponent<Kart>();
-                enem.stick(GetComponent<Rigidbody>());
-                //print("sticky");
-            }
-            driftTime -= Time.fixedDeltaTime;
-        } else if (isDriftBoosting && driftTime <= 0)
-        {
-            isDriftBoosting = false;
-            driftTime = 0;
+        if (!active)
+        { 
+          if (isHoldingFlag) { flag.SendMessageUpwards("ungrab"); }  
+            return;
         }
+
+        //stunRaycastHit info;
+
+        if (!active) { return; }
+        if (isBursting && burstTime > 0)
+        {
+            //Stunner();
+            burstTime -= Time.fixedDeltaTime;
+        }
+        else if (isBursting && burstTime <= 0)
+        {
+            isBursting = false;
+            burstTime = 0;
+        }
+        //Magnetize();
         if (drifting)
         {
-            drift_kart();
-        } else
-        {
+            if (driMethod == DriftMethod.relative) { RelativeDrift(); }
+            else { AbsoluteDrift(); }
+            //drift *= .99f;
+        } else {
             acccelerating();
             booosting();
             move_kart();
         }
-        boostMeter.value = boostAmt;
+        master.boost_update(fuelAmt);
+        TrackYou();
     }
 
-    public void GoHome()
+    private void OnCollisionEnter(Collision collision)
     {
-        //bod.Sleep();
-        //self.transform.localPosition = home.transform.localPosition;
-        //Quaternion ass = new Quaternion();
-        //ass.eulerAngles = home.transform.localEulerAngles;
-        //self.transform.localRotation = ass;
-        //bod.WakeUp();
-        //tex.text = "1/2";
+        if (collision.collider.TryGetComponent<Kart> (out Kart kart)) {
+            if (isBursting)
+            {
+                PhotonView ek =  kart.GetComponent<PhotonView>();
+                ek.RPC("RPC_Stun", ek.Owner);
+            }
+        }
+    }
+
+    void Stunner()
+    {
+        // check for driftboost in update
+        RaycastHit info;
+        if (Physics.BoxCast(transform.position, new Vector3(5, 5, 5), transform.TransformDirection(Vector3.forward),
+            out info, Quaternion.identity, 30f, LayerMask.GetMask("Karts"), QueryTriggerInteraction.UseGlobal))
+        {
+            print(info.collider.name);
+            if (info.collider.gameObject.TryGetComponent<NetworkedPlayer>(out NetworkedPlayer p))
+            {
+                //stun
+
+                if (PhotonNetwork.InRoom)
+                {
+                    print("roomy");
+                    if (info.collider.TryGetComponent<PhotonView>(out PhotonView viewtoo)) { viewtoo.RPC("RPC_Stun", RpcTarget.All); }
+                } else { info.collider.SendMessage("RPC_Stun"); }
+
+            }
+
+        }
+
+    }
+
+    [PunRPC]
+    void RPC_ColorTrail(float r, float g, float b)
+    {
+        if(TryGetComponent<TrailRenderer>(out TrailRenderer trail))
+        {
+            print("color");
+            Color color = new Vector4(r, g, b);
+            Gradient gradient = new Gradient();
+            gradient.SetKeys(
+                new GradientColorKey[] { new GradientColorKey(color, 0.75f), new GradientColorKey(color, 1.0f) },
+                new GradientAlphaKey[] { new GradientAlphaKey(1, 0.0f), new GradientAlphaKey(1, 1.0f) }
+                );
+            trail.colorGradient = gradient;
+
+        }
+    }
+
+    [PunRPC]
+    void RPC_Stun()
+    {
+        StartCoroutine(stun());
+    }
+
+    IEnumerator stun()
+    {
+        print("stune");
+        active = false;
+        yield return new WaitForSeconds(2);
+        active = true;
     }
 
     void acccelerating()
@@ -126,43 +194,24 @@ public class Kart : MonoBehaviour
         }
     }
 
-    public void Accel(InputAction.CallbackContext context)
+    void RelativeDrift()
     {
-        bool btn = context.ReadValueAsButton();
-        //Debug.Log(context.ReadValueAsButton());
-        if (btn)
-        {
-            accelerating = true;
-        } else {
-            accelerating = false;
-        }
+        Vector3 rot;
+        float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) - (driftTurn / 4));
+        rot.y = amt;
+        amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) - (driftTurn/4));
+        rot.x = -amt;
+        rot.z = roll * 100;
+        Quaternion deltaRotation = Quaternion.Euler(rot * Time.fixedDeltaTime);
+        bod.MoveRotation(bod.rotation * deltaRotation);
+        driftTime += Time.fixedDeltaTime;
+        if (fuelAmt < 125 && buMethod == BurstMethod.manual) { fuelAmt += 0.5f; }
+        bod.AddRelativeForce(drift, ForceMode.VelocityChange);
     }
 
-    public void Steer(InputAction.CallbackContext context)
+    void AbsoluteDrift()
     {
-        left_steering = context.ReadValue<Vector2>();
-        //print(left_steering);
-    }
-
-    public void set_lap()
-    {
-        //switch (lap)
-        //{
-        //    case 1:
-        //        tex.text = "2/2";
-        //        lap = 2;
-        //        break;
-        //    case 2:
-        //        tex.text = "Done";
-        //        lap = 3;
-        //        break;
-        //    default: break;
-        //}
-    }
-
-    void drift_kart()
-    {
-        Vector3 rot = transform.localRotation.eulerAngles;
+        Vector3 rot;
         float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + driftTurn);
         rot.y = amt;
         amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + driftTurn);
@@ -171,7 +220,8 @@ public class Kart : MonoBehaviour
         Quaternion deltaRotation = Quaternion.Euler(rot * Time.fixedDeltaTime);
         bod.MoveRotation(bod.rotation * deltaRotation);
         driftTime += Time.fixedDeltaTime;
-        bod.AddForce(drift, ForceMode.VelocityChange);
+        if (fuelAmt < 125 && buMethod == BurstMethod.manual) { fuelAmt += 1f; }
+        bod.AddForce(drift, ForceMode.VelocityChange); 
     }
 
     void move_kart()
@@ -192,69 +242,64 @@ public class Kart : MonoBehaviour
         boost = 0f;
     }
 
-    public void driift(InputAction.CallbackContext context)
+    public void driift(bool btn)
     {
+        float modifier = 0;
         RaycastHit info;
-
-        bool btn = context.ReadValueAsButton();
         if (btn)
         {
+            
             move.z = acceleration;
-            drift = transform.TransformDirection(move);
-            print("driftu");
+            if (driMethod == DriftMethod.absolute) { drift = transform.TransformDirection(move); }
+            else { drift = move; }
+            //print("driftu");
             drifting = true;
-            //isDriftBoosting = false;
-            driftCam.Priority = 11;
         }
         else
         {
-            isDriftBoosting = true;
-            layermask = 1 << 12;
-            Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, Mathf.Infinity, layermask);
-            //hits a wall
-            if (!info.collider)
-            {
-                isDriftBoosting = false;
-                drifting = false;
-                driftCam.Priority = 9;
-                return;
-            }
-            if (info.collider && info.distance < 30)
-            {
-                print("bonk" + info.collider.name);
-                layermask = 1 << 11;
-                isDriftBoosting = false;
-                driftTime = 0;
-            } else if (driftTime >= 1.5f)
-            {
-                move.z = driftBoost;
-                bod.AddRelativeForce(move, ForceMode.VelocityChange);
-                driftTime = driftBoostDuration;
-            } else if (driftTime >= 1f) {
-                move.z = driftBoost/2;
-                bod.AddRelativeForce(move, ForceMode.VelocityChange);
-                driftTime = driftBoostDuration/2;
-            } else if (driftTime >= 0.5f) {
-                move.z = driftBoost/3;
-                bod.AddRelativeForce(move, ForceMode.VelocityChange);
-                driftTime = driftBoostDuration/3;
-            }
-            layermask = 1 << 11;
-            //driftTime = 0;
-            print("undrift");
+            if (driftTime >= 2f) { modifier = 2; }
+            else if (driftTime >= 0.3f) { modifier = driftTime; }
+            else { modifier = 0; }
             drifting = false;
-            driftCam.Priority = 9;
+            if (buMethod == BurstMethod.auto) { buursting(modifier); }
+            //else if (buMethod == BurstMethod.manual) { get_boost(modifier); }
+            driftTime = 0;
         }
+        //{
+        //    isDriftBoosting = true;
+        //    layermask = 1 << 12;
+        //    Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, Mathf.Infinity, layermask);
+        //    //hits a wall
+        //    if (!info.collider)
+        //    {
+        //        isDriftBoosting = false;
+        //        drifting = false;
+        //        return;
+        //    }
+        //    if (info.collider && info.distance < 30)
+        //    {
+        //        print("bonk" + info.collider.name);
+        //        layermask = 1 << 11;
+        //        isDriftBoosting = false;
+        //        driftTime = 0;
+
     }
 
-    public void rollR(InputAction.CallbackContext context)
+    public void remote_buurst(float mod)
     {
-        roll = -context.ReadValue<float>();
+        if (buMethod == BurstMethod.manual) { buursting(mod); }
     }
 
-    public void rollL(InputAction.CallbackContext context)
+    private void buursting(float reduction)
     {
-        roll = context.ReadValue<float>();
+        //check if there is a wall in front of player
+        //check method: if manual, check for enough fuel
+        if (buMethod == BurstMethod.manual && fuelAmt < 125) { return; }
+        float burst = burstAmt * reduction;
+        bod.AddRelativeForce(new Vector3(0, 0, burst), ForceMode.VelocityChange);
+        burstTime = burstDuration * reduction;
+        isBursting = true;
+        if (buMethod == BurstMethod.manual) { fuelAmt -= 125; }
     }
 
     // pickup boost effect
@@ -262,55 +307,97 @@ public class Kart : MonoBehaviour
     {
         //RaycastHit info;
         
-        if (boosting && boostAmt > 0)
+        if (boosting && fuelAmt > 0)
         {
-            
             //layermask = 1 << 11;
             boost = boostStrength;
-            boostAmt -= 1;
+            fuelAmt -= 1;
             //infinite boost line
             //boostAmt += 1;
-        } else if (boostAmt == 0)
+        } else if (fuelAmt == 0)
         {
             print("boost empty");
-            boostAmt = -1;
+            fuelAmt = -1;
         }
     }
 
-    public void get_boost()
+    public void get_boost(float modifier)
     {
-        boostAmt += 50;
-        if (boostAmt > 200) { boostAmt = 200;}
+        fuelAmt += 50 * modifier;
+        if (fuelAmt > 200) { fuelAmt = 200;}
         print("boost get");
-        
-        //info.collider.SendMessage("get");
     }
 
-    public void booost(InputAction.CallbackContext context)
+    //setters
+    public void setMaster(Maestro maestro) { master = maestro; }
+
+    void TrackYou()
     {
-        bool btn = context.ReadValueAsButton();
-        //Debug.Log(context.ReadValueAsButton());
-        if (btn)
-        {
-            boosting = true;
-        }
-        else
-        {
-            boosting = false;
-        }
+        Vector3 pos = transform.position;
+        you.transform.localPosition = pos;
     }
 
-    void stick(Rigidbody stickie)
-    {
-        if (!GetComponent<FixedJoint>())
-        {
-            bod.mass = 0;
-            FixedJoint sticker = gameObject.AddComponent<FixedJoint>();
-            sticker.connectedBody = stickie;
-            sticker.enableCollision = false;
-        }
-        print("sticky");
+
+
+
+    //AYO: unfinished magnetize scripts
+
+    //public void Magnetize()
+    //{
+    //    RaycastHit info;
+
+    //    if (!active) { return; }
+    //    //magnetizer
+    //    if (isBursting && driftTime > 0)
+    //    {
+    //        if (Physics.BoxCast(transform.position, new Vector3(5, 5, 5), transform.TransformDirection(Vector3.forward),
+    //            out info, Quaternion.identity, 30f, LayerMask.GetMask("Default"), QueryTriggerInteraction.UseGlobal))
+    //        {
+    //            print(info.collider.name);
+    //            if (info.collider.name == "Network Kart(Clone)")
+    //            {
+    //                //info.collider.SendMessage("stick");
+    //                enem = info.collider.GetComponent<PhotonView>();
+    //                //enem.TransferOwnership(view.Owner);
+    //                if (enem) { enem.RPC("stick", RpcTarget.All, view.ViewID); }
+    //                //enem.stick(GetComponent<Rigidbody>());
+    //                print("sticky");
+    //            }
+
+    //        }
+    //        driftTime -= Time.fixedDeltaTime;
+    //    }
+    //    else if (isDriftBoosting && driftTime <= 0)
+    //    {
+    //        isDriftBoosting = false;
+    //        driftTime = 0;
+    //    }
+    //}
+
+    //[PunRPC]
+    //void stick(int id)
+    //{
+    //    if (!GetComponent<FixedJoint>())
+    //    {
+    //        bod.mass = 1;
+    //        PhotonView vicker = PhotonView.Find(id);
+    //        //bod.constraints = RigidbodyConstraints.FreezeAll;
+    //        //bod.isKinematic = true;
+    //        FixedJoint sticker = gameObject.AddComponent<FixedJoint>();
+    //        sticker.connectedBody = vicker.GetComponent<Rigidbody>();
+    //        sticker.enableCollision = false;
+    //        sticker.massScale = sticker.connectedBody.mass / bod.mass;
+    //        sticker.connectedMassScale = 1;
+    //        //Destroy(GetComponent<PhotonView>());
+    //        //view.TransferOwnership(vicker.Owner);
+    //        GetComponent<PhotonRigidbodyView>().enabled = false;
+    //        GetComponent<PhotonTransformView>().enabled = false;
+    //        active = false;
+    //        stuck = true;
+    //    }
+    //    print("sticky");
         
+    //}
 
-    }
+    
 }

@@ -3,21 +3,23 @@
 --- !u!78 &1
 TagManager:
   serializedVersion: 2
-  tags: []
+  tags:
+  - SpawnPoints
+  - Flag
   layers:
   - Default
   - TransparentFX
   - Ignore Raycast
-  - 
+  - Flags
   - Water
   - UI
-  - 
+  - Karts
   - 
   - PostProcessing
   - Not in Reflection
-  - Boost pickup
-  - Karts only
-  - Walls
+  - Trigger
+  - Minimap
+  - Nodes
   - 
   - 
   - 

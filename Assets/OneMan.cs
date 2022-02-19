@@ -25,7 +25,6 @@ public class OneMan : MonoBehaviour
     void Start()
     {
         Instantiate(t1, new Vector3(0, 0, 0), Quaternion.identity);
-        
         //t1.SetActive(true);
         kart = FindObjectOfType<Kart>();
         track_one();
@@ -34,7 +33,6 @@ public class OneMan : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
     
         if (curr)
         {
@@ -67,16 +65,12 @@ public class OneMan : MonoBehaviour
         kart.active = false;
     }
 
-    void reset_cars()
-    {
-        kart.GoHome(); 
-    }
-
     void start_race()
     {
         // print("start");
         kart.active = true; 
     }
+
     void track_one()
     {
         start_race();
@@ -92,8 +86,6 @@ public class OneMan : MonoBehaviour
         Destroy(clone1);
         yield return new WaitForSeconds(1);
         //get rid of t1
-        reset_cars();
-        reset_kart();
         clone2 = Instantiate(t2, t2Point.transform.position, t2Point.transform.rotation);
         curr = FindObjectOfType<TrackBase>();
         track = 2;
@@ -109,8 +101,7 @@ public class OneMan : MonoBehaviour
         Destroy(clone2);
         yield return new WaitForSeconds(1);
         //get rid of t1
-        reset_cars();
-        reset_kart();
+  
         clone3 = Instantiate(t3, t3Point.transform.position, t3Point.transform.rotation);
         curr = FindObjectOfType<TrackBase>();
         track = 3;
@@ -118,10 +109,7 @@ public class OneMan : MonoBehaviour
         start_race();
     }
 
-    void reset_kart()
-    {
-        kart.lap = 1;
-    }
+
 
     void win_msg()
     {

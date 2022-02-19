@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &5745047221360027175
+--- !u!1 &5960030282891872475
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,8 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 4563200172694631501}
-  - component: {fileID: 5599584638653260998}
+  - component: {fileID: 4174007579873188518}
+  - component: {fileID: 1209333749814520305}
   m_Layer: 0
   m_Name: Caster
   m_TagString: Untagged
@@ -17,27 +17,27 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &4563200172694631501
+--- !u!4 &4174007579873188518
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5745047221360027175}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_GameObject: {fileID: 5960030282891872475}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 7365784386226309384}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1818360609 &5599584638653260998
+--- !u!1818360609 &1209333749814520305
 RotationConstraint:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5745047221360027175}
+  m_GameObject: {fileID: 5960030282891872475}
   m_Enabled: 1
   m_Weight: 1
   m_RotationAtRest: {x: 0, y: 0, z: 0}
@@ -82,7 +82,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 7960876055287396189}
-  - {fileID: 4563200172694631501}
+  - {fileID: 4174007579873188518}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -144,8 +144,11 @@ MonoBehaviour:
   directions: []
   clearDirs: []
   min: {x: 0, y: 0, z: 0}
-  max: 0
-  distances: []
+  maxX: 0
+  maxY: 0
+  maxZ: 0
+  distancesX: []
+  distancesY: []
 --- !u!1818360609 &1638405854734721730
 RotationConstraint:
   m_ObjectHideFlags: 0

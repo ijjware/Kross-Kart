@@ -14,7 +14,6 @@ public class Booster : MonoBehaviour
     {
         box = GetComponent<SphereCollider>();
         icon = GetComponentInChildren<MeshRenderer>();
-        
     }
 
     // Update is called once per frame
@@ -31,7 +30,10 @@ public class Booster : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         print("boost");
-        other.SendMessage("get_boost");
+        if (other.TryGetComponent<Kart>(out Kart kart))
+        {
+            kart.get_boost(1f);
+        }
         box.enabled = false;
         icon.enabled = false;
         time = 0;
