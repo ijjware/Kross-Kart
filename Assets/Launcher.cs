@@ -9,7 +9,7 @@ using Photon.Pun;
 
 public class Launcher : MonoBehaviourPunCallbacks
 {
-    byte maxPlayersRoom = 2;
+    byte maxPlayersRoom = 3;
     bool isConnecting;
     public InputField playerName;
     string gameVersion = "1";
@@ -53,6 +53,8 @@ public class Launcher : MonoBehaviourPunCallbacks
         print("failed to join random room...");
         RoomOptions options = new RoomOptions();
         options.MaxPlayers = maxPlayersRoom;
+        options.IsOpen = true;
+        options.IsVisible = true;
         PhotonNetwork.CreateRoom("poo", options);
         //PhotonNetwork.CreateRoom(null, new RoomOptions{ MaxPlayers = this.maxPlayersRoom });
         //base.OnJoinRandomFailed(returnCode, message);

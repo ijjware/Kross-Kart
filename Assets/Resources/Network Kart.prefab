@@ -24,7 +24,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 196096038835532521}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 17.86, z: -57.24}
+  m_LocalPosition: {x: 0, y: 1.05, z: -3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 5916209538960279611}
@@ -62,7 +62,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623766159134922715}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -648, y: -323, z: -72}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 6827963648107066680}
@@ -96,10 +96,10 @@ CapsuleCollider:
   m_Material: {fileID: 13400000, guid: 8387d342685e4864ba61b27a81e5bcea, type: 2}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 12.788788
-  m_Height: 72.52498
+  m_Radius: 0.56221884
+  m_Height: 3.2065003
   m_Direction: 2
-  m_Center: {x: 0, y: 6.2765503, z: 0.024353027}
+  m_Center: {x: 0, y: 0.16221887, z: -0.10213578}
 --- !u!114 &2330889635082539727
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -135,19 +135,19 @@ MonoBehaviour:
   buMethod: 1
   acceleration: 0
   rate_accel: 1
-  max_accel: 20
-  boostStrength: 50
+  max_accel: 2
+  boostStrength: 3
   fuelAmt: 0
   driftAccel: 0
   driftTurn: 100
   driftTime: 0
-  burstAmt: 3000
+  burstAmt: 300
   isBursting: 0
   move: {x: 0, y: 0, z: 0}
   drift: {x: 0, y: 0, z: 0}
   burstTime: 0
   burstDuration: 0.5
-  min_turn: 125
+  min_turn: 100
   turn_speed: 200
   active: 1
   team: 2
@@ -265,8 +265,8 @@ TrailRenderer:
       serializedVersion: 2
       m_Curve:
       - serializedVersion: 3
-        time: 0
-        value: 1
+        time: 0.123078376
+        value: 0.084504336
         inSlope: 0
         outSlope: 0
         tangentMode: 0

@@ -65,20 +65,29 @@ public class Maestro : MonoBehaviourPunCallbacks
             Kart kartty = PhotonView.Find((int)data[0]).GetComponent<Kart>();
             //goal type
             int goalType = (int)data[2];
-
             if (goalType == flaggy.getFlagType())
             {
+                print("goal = flag");
                 //return flag unless nutral
-                if (goalType == 0) { }// neutral scoring
+                if (goalType == 0) { NeutralScore(kartty.team, flaggy); }// neutral scoring
                 else { flag_reset(flaggy); }//return flag
-            } else { normal_score(flaggy); } // normal scoring
+            }
+            else { normal_score(flaggy); } // normal scoring
             
-            //int flaggyType = flaggy.getFlagType();
         }
         else if (eventCode == 2)
         {
             kart.GetComponent<PhotonView>().RPC("RPC_ColorTrail", RpcTarget.All, clor.r, clor.g, clor.b);
         }
+    }
+
+    private void NeutralScore(int team, Flag flag)
+    {
+        //score based on kart team
+        if (team == kart.team) { UsPts += flag.getPoints(); }
+        else { ThemPts += flag.getPoints(); }
+        flag_reset(flag);
+        score_update();
     }
 
     private void normal_score(Flag felg)
@@ -140,7 +149,6 @@ public class Maestro : MonoBehaviourPunCallbacks
                 bluGoal.transform.rotation, 0, team);
         }
     }
-
 
     private void score_update()
     {
@@ -278,7 +286,7 @@ public class Maestro : MonoBehaviourPunCallbacks
         //print(left_steering);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
         Vector3 rot = miniPivot.transform.rotation.eulerAngles;
         rot.x += change;
@@ -287,7 +295,7 @@ public class Maestro : MonoBehaviourPunCallbacks
         miniPivot.transform.Rotate(change, 0, 0, Space.Self);
 
         //increment timer
-        secs = (int)Time.fixedTime;
+        secs = 300 - (int)Time.fixedTime;
         mins = secs / 60;
         secs -= (mins * 60);
         string secString = "00";

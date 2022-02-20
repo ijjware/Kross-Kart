@@ -7,6 +7,7 @@ using Photon.Realtime;
 using Photon.Pun;
 using UnityEngine.Animations;
 
+
 public class Kart : MonoBehaviour
 {
     public Rigidbody bod;
@@ -57,6 +58,8 @@ public class Kart : MonoBehaviour
     //flag vars
     public bool isHoldingFlag = false;
     public Flag flag;
+    //[SerializeField]
+    public Queue<int> heldFlags = new Queue<int>();
 
     //input vars
     public bool accelerating = false;

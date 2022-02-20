@@ -6,6 +6,8 @@ using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
 
+
+//[System.Serializable]
 public class Flag : MonoBehaviour, IPunInstantiateMagicCallback
 {
     public GameObject trigger;
@@ -31,7 +33,7 @@ public class Flag : MonoBehaviour, IPunInstantiateMagicCallback
                 print("graeb");
                 grabber = other;
                 kart.isHoldingFlag = true;
-                kart.flag = gameObject.GetComponent<Flag>();
+                kart.heldFlags.Enqueue(gameObject.GetComponent<PhotonView>().ViewID);
                 grabbed = true;
                 isInGoal = false;
                 grab();

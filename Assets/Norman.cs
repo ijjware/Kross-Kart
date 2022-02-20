@@ -5,13 +5,79 @@ using UnityEngine;
 public class Norman : MonoBehaviour
 {
     //norman would be attached to the parent object of all the nodes in the graph
+    public Node[] allNodes;
     public Node enterer;
     public List<Node> checks;
+    public GameObject test;
 
     private void Start()
     {
-       checks = GetNConnects(enterer, 4);
+        allNodes = gameObject.GetComponentsInChildren<Node>();
+        //checks = GetNConnects(enterer, 4);
+        //ConnectNodes();
+        //enterer = GetClosestNode(test.transform.position);
     }
+
+
+    
+    public Node GetClosestNode(Vector3 point)
+    {
+        Node closest = allNodes[0];
+        foreach (Node node in allNodes)
+        {
+            float distSmall = Vector3.Distance(closest.transform.position, point);
+            float distOther = Vector3.Distance(node.transform.position, point);
+            if (distSmall > distOther )
+            {
+                closest = node;
+            }
+        }
+        return closest;
+    }
+
+    public Node GetFurthestNode(Vector3 point)
+    {
+        Node closest = allNodes[0];
+        foreach (Node node in allNodes)
+        {
+            float distSmall = Vector3.Distance(closest.transform.position, point);
+            float distOther = Vector3.Distance(node.transform.position, point);
+            if (distSmall < distOther)
+            {
+                closest = node;
+            }
+        }
+        return closest;
+    }
+
+    public void ConnectNodes()
+    {
+
+        //Node guy;
+        foreach(Node x in allNodes)
+        {
+            foreach(Node y in allNodes)
+            {
+                if (x.Equals(y) ) { continue; }
+                if (!Physics.Linecast(x.transform.position, y.transform.position))
+                {
+                    //print("linecast");
+                    if (x.neighbours.Contains(y)) { continue; }
+                    x.neighbours.Add(y);
+                    y.neighbours.Add(x);
+                    //Gizmos.DrawLine(x.transform.position, y.transform.position);
+                    
+
+                }
+            }
+        }
+
+
+    }
+
+
+
+
 
     public List<Node> GetNConnects(Node nod, int n)
     {
