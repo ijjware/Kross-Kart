@@ -59,7 +59,9 @@
     <Compile Include="Assets\Goal.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\SocketWebTcp.cs" />
     <Compile Include="Assets\Node.cs" />
+    <Compile Include="Assets\Fleur.cs" />
     <Compile Include="Assets\Flag.cs" />
+    <Compile Include="Assets\Resources\PlayerSorter.cs" />
     <Compile Include="Assets\Booster.cs" />
     <Compile Include="Assets\Karts\Kart.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\WebSocket.cs" />
@@ -75,7 +77,8 @@
     <Compile Include="Assets\Checkpoint.cs" />
     <Compile Include="Assets\Resources\NetworkedPlayer.cs" />
     <Compile Include="Assets\Launcher.cs" />
-    <Compile Include="Assets\Fleur.cs" />
+    <Compile Include="Assets\Groder.cs" />
+    <Compile Include="Assets\Ring.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.xml" />

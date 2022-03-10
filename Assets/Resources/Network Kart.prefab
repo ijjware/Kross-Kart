@@ -135,12 +135,13 @@ MonoBehaviour:
   buMethod: 1
   acceleration: 0
   rate_accel: 1
-  max_accel: 2
+  max_accel: 1.5
   boostStrength: 3
   fuelAmt: 0
   driftAccel: 0
   driftTurn: 100
   driftTime: 0
+  driftReduct: 0.99
   burstAmt: 300
   isBursting: 0
   move: {x: 0, y: 0, z: 0}
@@ -152,7 +153,6 @@ MonoBehaviour:
   active: 1
   team: 2
   isHoldingFlag: 0
-  flag: {fileID: 0}
   accelerating: 0
   drifting: 0
   left_steering: {x: 0, y: 0}

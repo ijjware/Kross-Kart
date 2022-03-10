@@ -39,6 +39,10 @@ MonoBehaviour:
   - stick
   - RPC_Stun
   - RPC_ColorTrail
+  - ex_grab
+  - grab
+  - ungrab
+  - spinner
   DisableAutoOpenWizard: 1
   ShowSettings: 1
   DevRegionSetOnce: 1

@@ -14,13 +14,19 @@ public class Flag : MonoBehaviour, IPunInstantiateMagicCallback
     public bool grabbed = false;
     public Collider grabber;
     public bool isInGoal = true;
-
+    private PhotonView view;
     // 0 == Either; 1 == Blu; 2 == Red
     public int flagType = 0;
     private int pointValue = 2;
     
     public int getFlagType() { return flagType; }
     public int getPoints() { return pointValue; }
+
+
+    private void Start()
+    {
+        view = GetComponent<PhotonView>();
+    }
 
     private void OnTriggerExit(Collider other)
     {
@@ -34,56 +40,60 @@ public class Flag : MonoBehaviour, IPunInstantiateMagicCallback
                 grabber = other;
                 kart.isHoldingFlag = true;
                 kart.heldFlags.Enqueue(gameObject.GetComponent<PhotonView>().ViewID);
-                grabbed = true;
-                isInGoal = false;
-                grab();
+                
+                view.RPC("grab", RpcTarget.All, grabber.GetComponent<PhotonView>().ViewID);
             }
         }
     }
 
     public void OnPhotonInstantiate(PhotonMessageInfo info)
     {
-
+        view = gameObject.GetComponent<PhotonView>();
         print("flag start");
         isInGoal = true;
         object[] teamData = info.photonView.InstantiationData;
         SetFlagType((int)teamData[0]);
         SetFlagColor();
-
     }
 
-    void grab()
+    [PunRPC]
+    void grab(int id)
     {
-        if (!gameObject.TryGetComponent<HingeJoint>(out HingeJoint spingy))
+        Rigidbody yes = PhotonView.Find(id).GetComponent<Rigidbody>();
+        if (!gameObject.TryGetComponent<SpringJoint>(out SpringJoint spingy))
         {
-            HingeJoint sping = gameObject.AddComponent<HingeJoint>();
-            //sping.spring = 40;
-            //sping.tolerance = .01f;
-            sping.connectedBody = grabber.attachedRigidbody;
+            SpringJoint sping = gameObject.AddComponent<SpringJoint>();
+            sping.spring = 40;
+            sping.tolerance = .01f;
+            sping.connectedBody = yes;
             trigger.GetComponent<BoxCollider>().enabled = false;
         }
         else
         {
-            spingy.connectedBody = grabber.attachedRigidbody;
+            spingy.connectedBody = yes;
             trigger.GetComponent<BoxCollider>().enabled = false;
         }
+        grabbed = true;
+        isInGoal = false;
     }
 
-    void grab(Rigidbody bod)
+    [PunRPC]
+    void ex_grab(Rigidbody bod)
     {
-        if (!gameObject.TryGetComponent<HingeJoint>(out HingeJoint spingy))
+        if (!gameObject.TryGetComponent<SpringJoint>(out SpringJoint spingy))
         {
-            HingeJoint sping = gameObject.AddComponent<HingeJoint>();
-            //sping.spring = 30;
-            //sping.tolerance = .01f;
+            SpringJoint sping = gameObject.AddComponent<SpringJoint>();
+            sping.spring = 30;
+            sping.tolerance = .01f;
             sping.connectedBody = bod;
             trigger.GetComponent<BoxCollider>().enabled = false;
         }
     }
-
+    
+    [PunRPC]
     void ungrab()
     {
-        if (gameObject.TryGetComponent<HingeJoint>(out HingeJoint spingy))
+        if (gameObject.TryGetComponent<SpringJoint>(out SpringJoint spingy))
         {
             print("drep");
             Destroy(spingy);

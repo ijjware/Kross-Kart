@@ -17,8 +17,6 @@ public class Norman : MonoBehaviour
         //ConnectNodes();
         //enterer = GetClosestNode(test.transform.position);
     }
-
-
     
     public Node GetClosestNode(Vector3 point)
     {
@@ -75,10 +73,6 @@ public class Norman : MonoBehaviour
 
     }
 
-
-
-
-
     public List<Node> GetNConnects(Node nod, int n)
     {
         print("GetNConnects");
@@ -131,23 +125,6 @@ public class Norman : MonoBehaviour
         return haves;
     }
 
-    /* bfs(g, v) 
-     {
-        queue.push(v)
-        while (queue.len > 0) 
-        {
-            v = queue.pop
-            if not visit: visit v
-                for w in v.neighbours:
-                    if not visit: queue.push w
-        }
-    }
-
-     */
-
-
-
-
-
+    
 
 }

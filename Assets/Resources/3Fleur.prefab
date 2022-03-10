@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5327390958892992517}
   - component: {fileID: 5327390958892992518}
   - component: {fileID: 3120818694487882528}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: 3Fleur
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -53,7 +53,7 @@ Rigidbody:
   m_AngularDrag: 0.05
   m_UseGravity: 0
   m_IsKinematic: 1
-  m_Interpolate: 0
+  m_Interpolate: 1
   m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &5327390958892992517
@@ -69,7 +69,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_SynchronizeVelocity: 1
-  m_SynchronizeAngularVelocity: 0
+  m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
 --- !u!114 &5327390958892992518
@@ -115,6 +115,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5327390958892992520}
     m_Modifications:
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_Spring
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 5327390958892992519}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: -3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -3.000002
+      objectReference: {fileID: 0}
     - target: {fileID: 5061116560142621409, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
       propertyPath: sceneViewId
       value: 0
@@ -194,52 +210,11 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6575575966920973803, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
---- !u!1 &1139977417645719187 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5061116560142621433, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
-  m_PrefabInstance: {fileID: 5327390957620470890}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1139977417645719181 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5061116560142621415, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
   m_PrefabInstance: {fileID: 5327390957620470890}
   m_PrefabAsset: {fileID: 0}
---- !u!59 &4495779052610865730
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1139977417645719187}
-  m_ConnectedBody: {fileID: 5327390958892992519}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0.5, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: -3.5, y: -3.000002, z: 0}
-  m_UseSpring: 0
-  m_Spring:
-    spring: 0
-    damper: 0
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 0
-  m_Limits:
-    min: 0
-    max: 0
-    bounciness: 0
-    bounceMinVelocity: 0.2
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1001 &5327390957728082131
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -299,6 +274,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: petal
       objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
 --- !u!4 &5648649336616111928 stripped
@@ -332,6 +315,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5327390958892992520}
     m_Modifications:
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_Spring
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 5327390958892992519}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: 4
+      objectReference: {fileID: 0}
     - target: {fileID: 5061116560142621409, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
       propertyPath: sceneViewId
       value: 0
@@ -411,52 +410,11 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6575575966920973803, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
---- !u!1 &1139977417906294813 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5061116560142621433, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
-  m_PrefabInstance: {fileID: 5327390957885213412}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1139977417906294787 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5061116560142621415, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
   m_PrefabInstance: {fileID: 5327390957885213412}
   m_PrefabAsset: {fileID: 0}
---- !u!59 &6826953944791134959
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1139977417906294813}
-  m_ConnectedBody: {fileID: 5327390958892992519}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0.5, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 3.5, y: 4, z: 0}
-  m_UseSpring: 0
-  m_Spring:
-    spring: 0
-    damper: 0
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 0
-  m_Limits:
-    min: 0
-    max: 0
-    bounciness: 0
-    bounceMinVelocity: 0.2
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1001 &5327390958150896537
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -464,6 +422,22 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 5327390958892992520}
     m_Modifications:
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_Spring
+      value: 40
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedBody
+      value: 
+      objectReference: {fileID: 5327390958892992519}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedAnchor.x
+      value: 3.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2455942001159925099, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
+      propertyPath: m_ConnectedAnchor.y
+      value: -3.000002
+      objectReference: {fileID: 0}
     - target: {fileID: 5061116560142621409, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
       propertyPath: sceneViewId
       value: 0
@@ -543,52 +517,11 @@ PrefabInstance:
     m_RemovedComponents:
     - {fileID: 6575575966920973803, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
---- !u!1 &1139977416023970144 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5061116560142621433, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
-  m_PrefabInstance: {fileID: 5327390958150896537}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &1139977416023970174 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5061116560142621415, guid: 22fd36648ab479848af71d047a69d8ca, type: 3}
   m_PrefabInstance: {fileID: 5327390958150896537}
   m_PrefabAsset: {fileID: 0}
---- !u!59 &7293627201542451874
-HingeJoint:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1139977416023970144}
-  m_ConnectedBody: {fileID: 5327390958892992519}
-  m_ConnectedArticulationBody: {fileID: 0}
-  m_Anchor: {x: 0, y: 0.5, z: 0}
-  m_Axis: {x: 1, y: 0, z: 0}
-  m_AutoConfigureConnectedAnchor: 1
-  m_ConnectedAnchor: {x: 3.5, y: -3.000002, z: 0}
-  m_UseSpring: 0
-  m_Spring:
-    spring: 0
-    damper: 0
-    targetPosition: 0
-  m_UseMotor: 0
-  m_Motor:
-    targetVelocity: 0
-    force: 0
-    freeSpin: 0
-  m_UseLimits: 0
-  m_Limits:
-    min: 0
-    max: 0
-    bounciness: 0
-    bounceMinVelocity: 0.2
-    contactDistance: 0
-  m_BreakForce: Infinity
-  m_BreakTorque: Infinity
-  m_EnableCollision: 0
-  m_EnablePreprocessing: 1
-  m_MassScale: 1
-  m_ConnectedMassScale: 1
 --- !u!1001 &5327390958215691539
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -647,6 +580,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
       propertyPath: m_Name
       value: petal (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
@@ -732,6 +673,14 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
       propertyPath: m_Name
       value: petal (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 919132149155446097, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
+      propertyPath: m_Layer
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 8164078558771037576, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}
+      propertyPath: m_Layer
+      value: 3
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 4cdfb96cdd958464eb6b38a534ffe94e, type: 3}

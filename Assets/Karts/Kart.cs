@@ -36,6 +36,7 @@ public class Kart : MonoBehaviour
     public float driftAccel = 0f;
     public float driftTurn = 100;
     public float driftTime = 0f;
+    public float driftReduct = .99f;
 
     //burst vars
     public float burstAmt = 1500;
@@ -54,11 +55,10 @@ public class Kart : MonoBehaviour
     private Maestro master;
     private int layermask = 0;
     public int team = 2;
+    public int group;
 
     //flag vars
     public bool isHoldingFlag = false;
-    public Flag flag;
-    //[SerializeField]
     public Queue<int> heldFlags = new Queue<int>();
 
     //input vars
@@ -79,7 +79,17 @@ public class Kart : MonoBehaviour
     {
         if (!active)
         { 
-          if (isHoldingFlag) { flag.SendMessageUpwards("ungrab"); }  
+          if (isHoldingFlag) 
+            {
+                PhotonView un = new PhotonView();
+                while (heldFlags.Count >0)
+                {
+                    un = PhotonView.Find(heldFlags.Dequeue());
+                    un.RPC("ungrab", RpcTarget.All);
+                }
+                isHoldingFlag = false;
+                
+            }  
             return;
         }
 
@@ -101,7 +111,7 @@ public class Kart : MonoBehaviour
         {
             if (driMethod == DriftMethod.relative) { RelativeDrift(); }
             else { AbsoluteDrift(); }
-            //drift *= .99f;
+            drift *= driftReduct;
         } else {
             acccelerating();
             booosting();
@@ -161,6 +171,11 @@ public class Kart : MonoBehaviour
             trail.colorGradient = gradient;
 
         }
+        if(you.TryGetComponent<MeshRenderer>(out MeshRenderer meshy))
+        {
+            //meshy.material.SetColor(you.name, new Color(r, g, b));
+            meshy.material.color = new Color(r, g, b);
+        }
     }
 
     [PunRPC]
@@ -200,9 +215,9 @@ public class Kart : MonoBehaviour
     void RelativeDrift()
     {
         Vector3 rot;
-        float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) - (driftTurn / 4));
+        float amt = left_steering.x * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + driftTurn);
         rot.y = amt;
-        amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) - (driftTurn/4));
+        amt = left_steering.y * (min_turn + (turn_speed * (max_accel - acceleration) / (max_accel * 200)) + driftTurn);
         rot.x = -amt;
         rot.z = roll * 100;
         Quaternion deltaRotation = Quaternion.Euler(rot * Time.fixedDeltaTime);

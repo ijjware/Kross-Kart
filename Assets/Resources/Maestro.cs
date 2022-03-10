@@ -20,7 +20,7 @@ public class Maestro : MonoBehaviourPunCallbacks
     public GameObject[] spawns;
     public Slider boost;
     public Text timer;
-    public int secs = 0;
+    public int secs = 300;
     public int mins = 0;
 
     float change;
@@ -38,6 +38,7 @@ public class Maestro : MonoBehaviourPunCallbacks
     public GameObject bluGoal;
     public GameObject redGoal;
     const byte  ChangeColorEventCode = 2;
+    private int numPlayers;
 
     public bool isActive = false;
 
@@ -163,8 +164,20 @@ public class Maestro : MonoBehaviourPunCallbacks
     void Start()
     {
         clor = Random.ColorHSV();
-        int numPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
+        numPlayers = PhotonNetwork.CurrentRoom.PlayerCount;
         spawns = GameObject.FindGameObjectsWithTag("SpawnPoints");
+
+        if (PhotonNetwork.IsMasterClient)
+        {
+            GetComponent<PlayerSorter>().enabled = true;
+            Groder groder = FindObjectOfType<Groder>();
+            groder.enabled = true;
+            Vector3 dir = spawns[0].transform.TransformDirection(Vector3.forward);
+            Vector3 pos = spawns[0].transform.position;
+            groder.SetStartingNodes(pos, dir, 1);
+        }
+
+        
         if (PhotonNetwork.InRoom)
         {
             startPos = spawns[numPlayers - 1].transform.position;
@@ -179,25 +192,27 @@ public class Maestro : MonoBehaviourPunCallbacks
                 driftCam.Follow = p1kar.transform;
                 driftCam.LookAt = p1kar.transform;
                 kart.setMaster(gameObject.GetComponent<Maestro>());
-                if (numPlayers%2 == 0) { kart.team = 0; } //RED team
-                else { kart.team = 1; } //BLU team
-                kart.you = you;
+                if (numPlayers%2 == 0) 
+                { 
+                    kart.team = 0; 
+
+                } //RED team
+                else 
+                { 
+                    kart.team = 1;
+
+                } //BLU team
+                kart.you = PhotonNetwork.Instantiate("you", startPos, startRot);
                 
             }
 
-            ////freeze other kart
-            //if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
-            //{
-            //    kart.enabled = true;
-            //}
+            //freeze other kart
+            if (PhotonNetwork.CurrentRoom.PlayerCount == 1)
+            {
+                kart.enabled = true;
+            }
         }
-
-        //enterer.GetNConnects(senders, nodes, 4);
-        
-        //foreach(GameObject node in nodes)
-        
-        kart.enabled = true;
-        FlagInstance();
+       
 
 
         //doesn't edit gradient of karts on foreign clients that are not yet instantiated
@@ -293,7 +308,27 @@ public class Maestro : MonoBehaviourPunCallbacks
         Quaternion nov = Quaternion.identity;
         nov.eulerAngles = rot;
         miniPivot.transform.Rotate(change, 0, 0, Space.Self);
+        TimerUpdate();
+        if(PhotonNetwork.IsMasterClient)
+        {
+            if (numPlayers < PhotonNetwork.CurrentRoom.PlayerCount)
+            {
+                //new player
 
+            }
+        }
+    }
+    private void HeadCount()
+    {
+        //keep running tab of all players gameobjects or view ids
+        //get all kart gameobjects in scene
+        // compare to list
+        // deal with kart object not in list
+    }
+
+    private void TimerUpdate()
+    {
+        if (secs == 0) { return; }
         //increment timer
         secs = 300 - (int)Time.fixedTime;
         mins = secs / 60;
@@ -301,11 +336,10 @@ public class Maestro : MonoBehaviourPunCallbacks
         string secString = "00";
         string minString = "00    ";
         if (secs < 10) { secString = "0" + secs; }
-        else if (secs < 60 ) { secString = secs.ToString(); }
+        else if (secs < 60) { secString = secs.ToString(); }
         if (mins > 9) { minString = mins + "    "; }
-        else if ( mins > 0) { minString = "0" + mins + "    "; }
+        else if (mins > 0) { minString = "0" + mins + "    "; }
         timer.text = minString + secString;
-
     }
 
 }
