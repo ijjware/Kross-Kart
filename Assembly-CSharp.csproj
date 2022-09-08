@@ -56,29 +56,35 @@
     <Analyzer Include="C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\Microsoft\Visual Studio Tools for Unity\Analyzers\Microsoft.Unity.Analyzers.dll" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Assets\Goal.cs" />
+    <Compile Include="Assets\Trash\Goal.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\SocketWebTcp.cs" />
     <Compile Include="Assets\Node.cs" />
-    <Compile Include="Assets\Fleur.cs" />
-    <Compile Include="Assets\Flag.cs" />
+    <Compile Include="Assets\Trash\Fleur.cs" />
+    <Compile Include="Assets\Trash\Flag.cs" />
     <Compile Include="Assets\Resources\PlayerSorter.cs" />
     <Compile Include="Assets\Booster.cs" />
+    <Compile Include="Assets\Heather.cs" />
     <Compile Include="Assets\Karts\Kart.cs" />
+    <Compile Include="Assets\Ring.cs" />
     <Compile Include="Assets\Photon\PhotonLibs\WebSocket\WebSocket.cs" />
+    <Compile Include="Assets\PlayerMaestro.cs" />
     <Compile Include="Assets\OneMan.cs" />
     <Compile Include="Assets\Tracks\TrackBase.cs" />
     <Compile Include="Assets\Trash\KartWork.cs" />
+    <Compile Include="Assets\Groder.cs" />
     <Compile Include="Assets\Trash\CameraWork.cs" />
     <Compile Include="Assets\Trash\KartSimple.cs" />
     <Compile Include="Assets\Karts\NPK.cs" />
+    <Compile Include="Assets\itemsIG\Item.cs" />
     <Compile Include="Assets\Karts\Wabbit.cs" />
+    <Compile Include="Assets\ExtDebug.cs" />
+    <Compile Include="Assets\itemsIG\ItBurst.cs" />
     <Compile Include="Assets\Norman.cs" />
+    <Compile Include="Assets\EventMaestro.cs" />
     <Compile Include="Assets\Resources\Maestro.cs" />
     <Compile Include="Assets\Checkpoint.cs" />
     <Compile Include="Assets\Resources\NetworkedPlayer.cs" />
     <Compile Include="Assets\Launcher.cs" />
-    <Compile Include="Assets\Groder.cs" />
-    <Compile Include="Assets\Ring.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.xml" />
