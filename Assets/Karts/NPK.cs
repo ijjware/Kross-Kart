@@ -5,6 +5,8 @@ using UnityEngine;
 using UnityEngine.AI;
 using UnityEngine.UI;
 
+// 8-13: script works and isn't dependent on a rabbit to chase, does get stuck on corners tho
+// uncomment difff assignment, sniff() call and method, and wabbit var to enable rabbit chasing
 public class NPK : MonoBehaviour
 {
 
@@ -14,10 +16,10 @@ public class NPK : MonoBehaviour
     private Vector3 pos;
     public float rayLength = 1;
 
-    public Vector3 difff;
-    public Vector3 target;
+    //public Vector3 difff;
+    //public Vector3 target;
     public Rigidbody bod;
-    public GameObject wabbit;
+    //public GameObject wabbit;
     public GameObject caster;
 
     //acceleration vars
@@ -47,7 +49,7 @@ public class NPK : MonoBehaviour
     public float maxZ;
     public List<float> distancesX;
     public List<float> distancesY;
-     private float wait = 0f;
+    private float wait = 0f;
 
     private void Start()
     {
@@ -58,21 +60,23 @@ public class NPK : MonoBehaviour
     {
         wait += Time.deltaTime;
         pos = caster.transform.position;
-        difff = transform.InverseTransformPoint(wabbit.transform.position);
-        if (wait > 0)
-        {
-            //update_directions();
-            //debug_rays(); 
-            vomit_rays();
-            path();
-            find_direction();
-            sniff();
-
-            wait = 0;
-        }
-
+        //difff = transform.InverseTransformPoint(wabbit.transform.position); // position of wabbit relative to kart
+        //if (wait > .01) //set int to whatever interval you want to wait for
+        //{
+        //    //update_directions();
+        //    //debug_rays(); 
+            
+        //    //sniff();
+            
+        //    wait = 0;
+        //}
+        //find_direction();
+        vomit_rays();
+        path();
+        
         acccelerating();
-            //acceleration = Mathf.Abs(max) * max_accel;
+
+        //acceleration = Mathf.Abs(max) * max_accel;
 
         move_kart();
 
@@ -89,6 +93,8 @@ public class NPK : MonoBehaviour
         transform.Rotate(rot.x, rot.y, 0, Space.Self);
         move.z = acceleration;
         bod.AddRelativeForce(move, ForceMode.Acceleration);
+        turn.x = 0;
+        turn.y = 0;
     }
 
     void find_direction()
@@ -134,6 +140,7 @@ public class NPK : MonoBehaviour
         }
     }
 
+    //finds largest dist in x and y directions
     void path()
     {
     maxY = 0;
@@ -146,6 +153,8 @@ public class NPK : MonoBehaviour
 
     }
 
+    // sloppily estimates maximum distance from kart to wall in several directions
+    // stores those distances in distancesY and distancesX
     void vomit_rays()
     {
         int index = 0;
@@ -207,6 +216,7 @@ public class NPK : MonoBehaviour
 
     }
 
+    // manages acceleration relative to distance to wall in front of kart
     void acccelerating()
     {
         RaycastHit info;
@@ -220,7 +230,7 @@ public class NPK : MonoBehaviour
             //print(info.distance);
         }
 
-        if (buffer > 200)
+        if (buffer > 20)
         {
             if (acceleration < max_accel)
             {
@@ -228,13 +238,14 @@ public class NPK : MonoBehaviour
                 if (acceleration > max_accel) { acceleration = max_accel; }
             }
 
-        }else if ( buffer > 100)
+        }else if ( buffer > 10)
         {
             if (acceleration > (max_accel/10))
             {
                 acceleration -= rate_accel;
                 if (acceleration < 0) { acceleration = 0; }
             }
+            find_direction();
         }
         else
         {
@@ -249,15 +260,15 @@ public class NPK : MonoBehaviour
 
     }
 
-    void sniff()
-    {
-       if (!Physics.Linecast(transform.position, wabbit.transform.position))
-        {
-            Debug.DrawLine(transform.position, wabbit.transform.position);
-            turn.x = Mathf.Sign(difff.x);
-            turn.y = Mathf.Sign(difff.y);
-        } else { Debug.DrawLine(transform.position, wabbit.transform.position, Color.red); }
-    }
+    //void sniff()
+    //{
+    //   if (!Physics.Linecast(transform.position, wabbit.transform.position))
+    //    {
+    //        Debug.DrawLine(transform.position, wabbit.transform.position);
+    //        turn.x = Mathf.Sign(difff.x);
+    //        turn.y = Mathf.Sign(difff.y);
+    //    } else { Debug.DrawLine(transform.position, wabbit.transform.position, Color.red); }
+    //}
 
     void update_directions()
     {

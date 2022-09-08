@@ -6,14 +6,22 @@ using UnityEngine.UI;
 using Photon.Realtime;
 using Photon.Pun;
 using UnityEngine.Animations;
+using ExitGames.Client.Photon;
 
-
-public class Kart : MonoBehaviour
+public class Kart : MonoBehaviour/*, IPunObservable*/
 {
     public Rigidbody bod;
     public PhotonView enem;
     public PhotonView view;
+
+    //'you' is the HUD child node that represents player location on the minimap
     public GameObject you;
+    //OG denotes whether this instance of the kart belongs to the client
+    public bool OG = false;
+
+    // IPunObservable vars
+    //Vector3 networkPosition;
+    //Quaternion networkRotation;
 
     enum DriftMethod { relative, absolute }
     [SerializeField]
@@ -25,10 +33,10 @@ public class Kart : MonoBehaviour
     //acceleration vars
     public float acceleration = 0.0f;
     public float rate_accel = 1f;
-    public float max_accel = 25f;
+    public float max_accel = 1.5f;
 
     //boost vars
-    public float boostStrength = 50f;
+    public float boostStrength = 1f;
     private float boost = 0f;
     public float fuelAmt = 0;
     
@@ -38,22 +46,16 @@ public class Kart : MonoBehaviour
     public float driftTime = 0f;
     public float driftReduct = .99f;
 
-    //burst vars
-    public float burstAmt = 1500;
-    public bool isBursting = false;
     public Vector3 move = new Vector3(0, 0, 0);
     public Vector3 drift = new Vector3(0, 0, 0);
-    public float burstTime = 0f;
-    public float burstDuration = 0.5f;
 
     //turning vars
     public float min_turn = 125;
     public float turn_speed = 200;
 
-    //big bool
+    //big bool (determines if this instance of the kart can receive input?)
     public bool active = true;
-    private Maestro master;
-    private int layermask = 0;
+    private PlayerMaestro master;
     public int team = 2;
     public int group;
 
@@ -69,43 +71,24 @@ public class Kart : MonoBehaviour
     public bool boosting = false;
 
     //magnet vars
-    public bool stuck = false;
-    private float maxStuckTime = 5f;
-    private float minStuckTime = 1f;
-    public int mashInputs = 0;
+    //public bool stuck = false;
+    //private float maxStuckTime = 5f;
+    //private float minStuckTime = 1f;
+    //public int mashInputs = 0;
 
-    // Update is called once per frame
+   
     void FixedUpdate()
     {
-        if (!active)
-        { 
-          if (isHoldingFlag) 
-            {
-                PhotonView un = new PhotonView();
-                while (heldFlags.Count >0)
-                {
-                    un = PhotonView.Find(heldFlags.Dequeue());
-                    un.RPC("ungrab", RpcTarget.All);
-                }
-                isHoldingFlag = false;
-                
-            }  
-            return;
-        }
-
-        //stunRaycastHit info;
+        //the next few lines are part of IPunObservable interface
+        //if (!view.IsMine)
+        //{
+        //    bod.position = Vector3.MoveTowards(bod.position, networkPosition, Time.fixedDeltaTime);
+        //    bod.rotation = Quaternion.RotateTowards(bod.rotation, networkRotation, (Time.fixedDeltaTime * 150.0f));
+        //}
 
         if (!active) { return; }
-        if (isBursting && burstTime > 0)
-        {
-            //Stunner();
-            burstTime -= Time.fixedDeltaTime;
-        }
-        else if (isBursting && burstTime <= 0)
-        {
-            isBursting = false;
-            burstTime = 0;
-        }
+        if (!OG) { return; }
+        if (!boosting) { get_boost(0.012f); }
         //Magnetize();
         if (drifting)
         {
@@ -117,43 +100,8 @@ public class Kart : MonoBehaviour
             booosting();
             move_kart();
         }
-        master.boost_update(fuelAmt);
+        { master.boost_update(fuelAmt); }
         TrackYou();
-    }
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.TryGetComponent<Kart> (out Kart kart)) {
-            if (isBursting)
-            {
-                PhotonView ek =  kart.GetComponent<PhotonView>();
-                ek.RPC("RPC_Stun", ek.Owner);
-            }
-        }
-    }
-
-    void Stunner()
-    {
-        // check for driftboost in update
-        RaycastHit info;
-        if (Physics.BoxCast(transform.position, new Vector3(5, 5, 5), transform.TransformDirection(Vector3.forward),
-            out info, Quaternion.identity, 30f, LayerMask.GetMask("Karts"), QueryTriggerInteraction.UseGlobal))
-        {
-            print(info.collider.name);
-            if (info.collider.gameObject.TryGetComponent<NetworkedPlayer>(out NetworkedPlayer p))
-            {
-                //stun
-
-                if (PhotonNetwork.InRoom)
-                {
-                    print("roomy");
-                    if (info.collider.TryGetComponent<PhotonView>(out PhotonView viewtoo)) { viewtoo.RPC("RPC_Stun", RpcTarget.All); }
-                } else { info.collider.SendMessage("RPC_Stun"); }
-
-            }
-
-        }
-
     }
 
     [PunRPC]
@@ -161,7 +109,6 @@ public class Kart : MonoBehaviour
     {
         if(TryGetComponent<TrailRenderer>(out TrailRenderer trail))
         {
-            print("color");
             Color color = new Vector4(r, g, b);
             Gradient gradient = new Gradient();
             gradient.SetKeys(
@@ -169,13 +116,20 @@ public class Kart : MonoBehaviour
                 new GradientAlphaKey[] { new GradientAlphaKey(1, 0.0f), new GradientAlphaKey(1, 1.0f) }
                 );
             trail.colorGradient = gradient;
+        }
+        //TODO: make this work in multiplayer
+        //if(you.TryGetComponent<MeshRenderer>(out MeshRenderer meshy))
+        //{
+        //    //meshy.material.SetColor(you.name, new Color(r, g, b));
+        //    meshy.material.color = new Color(r, g, b);
+        //}
+    }
 
-        }
-        if(you.TryGetComponent<MeshRenderer>(out MeshRenderer meshy))
-        {
-            //meshy.material.SetColor(you.name, new Color(r, g, b));
-            meshy.material.color = new Color(r, g, b);
-        }
+    [PunRPC]
+    void SetGroup(int id)
+    {
+        print("set in group " + id);
+        group = id;
     }
 
     [PunRPC]
@@ -206,12 +160,15 @@ public class Kart : MonoBehaviour
         {
             if (acceleration > 0)
             {
-                acceleration -= rate_accel;
-                if (acceleration < 0) { acceleration = 0; }
+                acceleration = 0;
+                //TODO: what do the next two lines do?
+                //acceleration -= rate_accel;
+                //if (acceleration < 0) { acceleration = 0; }
             }
         }
     }
 
+    //TODO: pls denote diff between absolute and relative methods
     void RelativeDrift()
     {
         Vector3 rot;
@@ -244,6 +201,7 @@ public class Kart : MonoBehaviour
 
     void move_kart()
     {
+
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward * 10), Color.red, 1f);
         Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down * 10), Color.red, 1f);
         Vector3 rot;
@@ -263,14 +221,12 @@ public class Kart : MonoBehaviour
     public void driift(bool btn)
     {
         float modifier = 0;
-        RaycastHit info;
         if (btn)
         {
             
             move.z = acceleration;
             if (driMethod == DriftMethod.absolute) { drift = transform.TransformDirection(move); }
             else { drift = move; }
-            //print("driftu");
             drifting = true;
         }
         else
@@ -279,63 +235,21 @@ public class Kart : MonoBehaviour
             else if (driftTime >= 0.3f) { modifier = driftTime; }
             else { modifier = 0; }
             drifting = false;
-            if (buMethod == BurstMethod.auto) { buursting(modifier); }
-            //else if (buMethod == BurstMethod.manual) { get_boost(modifier); }
             driftTime = 0;
         }
-        //{
-        //    isDriftBoosting = true;
-        //    layermask = 1 << 12;
-        //    Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out info, Mathf.Infinity, layermask);
-        //    //hits a wall
-        //    if (!info.collider)
-        //    {
-        //        isDriftBoosting = false;
-        //        drifting = false;
-        //        return;
-        //    }
-        //    if (info.collider && info.distance < 30)
-        //    {
-        //        print("bonk" + info.collider.name);
-        //        layermask = 1 << 11;
-        //        isDriftBoosting = false;
-        //        driftTime = 0;
 
-    }
-
-    public void remote_buurst(float mod)
-    {
-        if (buMethod == BurstMethod.manual) { buursting(mod); }
-    }
-
-    private void buursting(float reduction)
-    {
-        //check if there is a wall in front of player
-        //check method: if manual, check for enough fuel
-        if (buMethod == BurstMethod.manual && fuelAmt < 125) { return; }
-        float burst = burstAmt * reduction;
-        bod.AddRelativeForce(new Vector3(0, 0, burst), ForceMode.VelocityChange);
-        burstTime = burstDuration * reduction;
-        isBursting = true;
-        if (buMethod == BurstMethod.manual) { fuelAmt -= 125; }
     }
 
     // pickup boost effect
     public void booosting()
     {
-        //RaycastHit info;
-        
         if (boosting && fuelAmt > 0)
         {
-            //layermask = 1 << 11;
             boost = boostStrength;
             fuelAmt -= 1;
-            //infinite boost line
-            //boostAmt += 1;
-        } else if (fuelAmt == 0)
+        } else if (fuelAmt < 0)
         {
-            print("boost empty");
-            fuelAmt = -1;
+            fuelAmt = 0;
         }
     }
 
@@ -343,17 +257,43 @@ public class Kart : MonoBehaviour
     {
         fuelAmt += 50 * modifier;
         if (fuelAmt > 200) { fuelAmt = 200;}
-        print("boost get");
     }
 
     //setters
-    public void setMaster(Maestro maestro) { master = maestro; }
+    //TODO: must be a way to isolate this so the kart script doesn't have to be aware of it's master
+    public void setMaster(PlayerMaestro maestro) { master = maestro; }
 
+    //TODO: maybe same as above, does the kart script NEED to be aware of the HUD child 'you'
     void TrackYou()
     {
         Vector3 pos = transform.position;
         you.transform.localPosition = pos;
     }
+
+    /* 
+        fixed a lot of the jitter but the rotation is still weirdly jumpy,
+        messing with step values helps but doesn't fix it. 
+        regular rigidbody photonview still works slightly better at least with 2 players.
+    */
+
+    //public void OnPhotonSerializeView(PhotonStream stream, PhotonMessageInfo info)
+    //{
+    //    if (stream.IsWriting)
+    //    {
+    //        stream.SendNext(this.bod.position);
+    //        stream.SendNext(this.bod.rotation);
+    //        stream.SendNext(this.bod.velocity);
+    //    }
+    //    else
+    //    {
+    //        networkPosition = (Vector3)stream.ReceiveNext();
+    //        networkRotation = (Quaternion)stream.ReceiveNext();
+    //        bod.velocity = (Vector3)stream.ReceiveNext();
+
+    //        float lag = Mathf.Abs((float)(PhotonNetwork.Time - info.SentServerTime));
+    //        networkPosition += (this.bod.velocity * lag);
+    //    }
+    //}
 
 
 
@@ -414,8 +354,8 @@ public class Kart : MonoBehaviour
     //        stuck = true;
     //    }
     //    print("sticky");
-        
+
     //}
 
-    
+
 }

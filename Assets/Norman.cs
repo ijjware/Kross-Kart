@@ -2,9 +2,15 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+
+//norman would be attached to the parent object of all the nodes in the graph
 public class Norman : MonoBehaviour
 {
-    //norman would be attached to the parent object of all the nodes in the graph
+    public static Norman instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     public Node[] allNodes;
     public Node enterer;
     public List<Node> checks;
@@ -14,7 +20,7 @@ public class Norman : MonoBehaviour
     {
         allNodes = gameObject.GetComponentsInChildren<Node>();
         //checks = GetNConnects(enterer, 4);
-        //ConnectNodes();
+        ConnectNodes();
         //enterer = GetClosestNode(test.transform.position);
     }
     
@@ -50,7 +56,6 @@ public class Norman : MonoBehaviour
 
     public void ConnectNodes()
     {
-
         //Node guy;
         foreach(Node x in allNodes)
         {
@@ -61,21 +66,36 @@ public class Norman : MonoBehaviour
                 {
                     //print("linecast");
                     if (x.neighbours.Contains(y)) { continue; }
-                    x.neighbours.Add(y);
-                    y.neighbours.Add(x);
-                    //Gizmos.DrawLine(x.transform.position, y.transform.position);
-                    
-
+                    if (Vector3.Distance(x.transform.position, y.transform.position) < 100)
+                    {
+                        //print("add");
+                        x.neighbours.Add(y);
+                        y.neighbours.Add(x);
+                        //Gizmos.DrawLine(x.transform.position, y.transform.position);
+                    } //else { print(Vector3.Distance(x.transform.position, y.transform.position)); }
                 }
             }
         }
+        //print("connected");
 
+        
+
+        
+        Groder.instance.enabled = true;
+        //Vector3 dir = spawns[0].transform.TransformDirection(Vector3.forward);
+        //Vector3 pos = spawns[0].transform.position;
+        //Groder.instance.SetStartingNodes(pos, dir, 1);
+        //  OR
+        //could run method on playersorter instance
+        //  OR
+        //blank placeholder method call
+        Groder.instance.SetStartingNodes(new Vector3(), Vector3.forward, 1);
 
     }
 
     public List<Node> GetNConnects(Node nod, int n)
     {
-        print("GetNConnects");
+        //print("GetNConnects");
         Queue<Node> nodes = new Queue<Node>();
         Queue<Node> noddies = new Queue<Node>();
         List<Node> nots = new List<Node>();
@@ -83,14 +103,14 @@ public class Norman : MonoBehaviour
         nodes.Enqueue(nod);
         Node nodder = nod;
     Queue1:
-        print("Queue1");
+        //print("Queue1");
         while (nodes.Count > 0)
         {
             nodder = nodes.Dequeue();
             nots.Add(nodder);
             foreach (Node nods in nodder.neighbours)
             {
-                print("add noddies");
+                //print("add noddies");
                 noddies.Enqueue(nods);
             }
         }
@@ -98,7 +118,7 @@ public class Norman : MonoBehaviour
         if (n != 0) { goto Queue2; }
         else { return CheckNConnects(nots, noddies); }
     Queue2:
-        print("Queue2");
+        //print("Queue2");
         while (noddies.Count > 0)
         {
             nodder = noddies.Dequeue();
@@ -124,7 +144,5 @@ public class Norman : MonoBehaviour
         }
         return haves;
     }
-
-    
 
 }

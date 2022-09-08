@@ -9,6 +9,10 @@ using Photon.Pun;
 public class NetworkedPlayer : MonoBehaviourPunCallbacks
 {
     public static GameObject LocalPlayerInstance;
+    private void Awake()
+    {
+        LocalPlayerInstance = this.gameObject;
+    }
     public GameObject playerNamePrefab;
     public Rigidbody rb;
     public Renderer kartMesh;

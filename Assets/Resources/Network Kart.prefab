@@ -44,8 +44,8 @@ GameObject:
   - component: {fileID: 2330889635082539727}
   - component: {fileID: 3069718922233406025}
   - component: {fileID: 4567408191730429270}
+  - component: {fileID: 2675516100621910758}
   - component: {fileID: 5731669736609440400}
-  - component: {fileID: 4215365709614746886}
   - component: {fileID: 7645096691925732054}
   m_Layer: 6
   m_Name: Network Kart
@@ -122,7 +122,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1623766159134922715}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 66eeb856d93278e46be98dc77feb3d05, type: 3}
   m_Name: 
@@ -131,35 +131,31 @@ MonoBehaviour:
   enem: {fileID: 0}
   view: {fileID: 4567408191730429270}
   you: {fileID: 0}
+  OG: 0
   driMethod: 0
   buMethod: 1
   acceleration: 0
   rate_accel: 1
   max_accel: 1.5
-  boostStrength: 3
+  boostStrength: 1
   fuelAmt: 0
   driftAccel: 0
   driftTurn: 100
   driftTime: 0
   driftReduct: 0.99
-  burstAmt: 300
-  isBursting: 0
   move: {x: 0, y: 0, z: 0}
   drift: {x: 0, y: 0, z: 0}
-  burstTime: 0
-  burstDuration: 0.5
   min_turn: 100
   turn_speed: 200
   active: 1
   team: 2
+  group: 0
   isHoldingFlag: 0
   accelerating: 0
   drifting: 0
   left_steering: {x: 0, y: 0}
   roll: 0
   boosting: 0
-  stuck: 0
-  mashInputs: 0
 --- !u!114 &4567408191730429270
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -175,15 +171,44 @@ MonoBehaviour:
   ObservedComponentsFoldoutOpen: 1
   Group: 0
   prefixField: -1
-  Synchronization: 3
+  Synchronization: 1
   OwnershipTransfer: 0
-  observableSearch: 2
+  observableSearch: 0
   ObservedComponents:
   - {fileID: 5731669736609440400}
-  - {fileID: 4215365709614746886}
   sceneViewId: 0
   InstantiationId: 0
   isRuntimeInstantiated: 0
+--- !u!114 &2675516100621910758
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1623766159134922715}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7a8e414eb6932744c8bcf00a2153ec3b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  move: {x: 0, y: 0, z: 0}
+  turn: {x: 0, y: 0}
+  rayLength: 20
+  bod: {fileID: 0}
+  caster: {fileID: 1623766159134922715}
+  acceleration: 0
+  rate_accel: 10
+  max_accel: 100
+  min_turn: 1
+  turn_speed: 3
+  directions: []
+  clearDirs: []
+  min: {x: 0, y: 0, z: 0}
+  maxX: 0
+  maxY: 0
+  maxZ: 0
+  distancesX: []
+  distancesY: []
 --- !u!114 &5731669736609440400
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -200,22 +225,6 @@ MonoBehaviour:
   m_SynchronizeAngularVelocity: 1
   m_TeleportEnabled: 0
   m_TeleportIfDistanceGreaterThan: 3
---- !u!114 &4215365709614746886
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1623766159134922715}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 627855c7f81362d41938ffe0b1475957, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  m_SynchronizePosition: 1
-  m_SynchronizeRotation: 1
-  m_SynchronizeScale: 0
-  m_UseLocal: 1
 --- !u!96 &7645096691925732054
 TrailRenderer:
   serializedVersion: 2
