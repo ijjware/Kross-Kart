@@ -2,6 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+using ExitGames.Client.Photon;
+using Photon.Realtime;
+using Photon.Pun;
 
 //norman would be attached to the parent object of all the nodes in the graph
 public class Norman : MonoBehaviour
@@ -77,19 +80,19 @@ public class Norman : MonoBehaviour
             }
         }
         //print("connected");
-
         
-
-        
-        Groder.instance.enabled = true;
         //Vector3 dir = spawns[0].transform.TransformDirection(Vector3.forward);
         //Vector3 pos = spawns[0].transform.position;
         //Groder.instance.SetStartingNodes(pos, dir, 1);
         //  OR
         //could run method on playersorter instance
         //  OR
-        //blank placeholder method call
-        Groder.instance.SetStartingNodes(new Vector3(), Vector3.forward, 1);
+        //blank placeholder method call NOT A SOLUTION
+      if (PhotonNetwork.IsMasterClient) 
+        {
+            Groder.instance.enabled = true;
+            Groder.instance.SetStartingNodes(new Vector3(), Vector3.forward, 1); 
+        }
 
     }
 

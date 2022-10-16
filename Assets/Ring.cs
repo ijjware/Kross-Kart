@@ -28,7 +28,7 @@ public class Ring : MonoBehaviour, IPunInstantiateMagicCallback
         existTime = (int)stuff[1];
         points = (int)stuff[2];
         view = GetComponent<PhotonView>().ViewID;
-        print("instance ring " + view);
+        //print("instance ring " + view);
     }
 
     private void Update()

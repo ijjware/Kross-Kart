@@ -27,8 +27,8 @@ ScriptsOnlyBuild:
     - Cinemachine.CinemachinePipeline
     - Cinemachine.CinemachineSameAsFollowTarget
     - Cinemachine.CinemachineVirtualCamera
-    PhotonUnityNetworking.Editor.dll:
-    - Photon.Pun.PunSceneSettings
+    ParrelSync.dll:
+    - ParrelSync.ClonesManagerWindow
     PhotonUnityNetworking.dll:
     - Photon.Pun.PhotonRigidbodyView
     - Photon.Pun.PhotonTransformView
@@ -69,6 +69,7 @@ ScriptsOnlyBuild:
     - UnityEngine.Rendering.UI.DebugUIHandlerVector3
     - UnityEngine.Rendering.UI.DebugUIHandlerVector4
     - UnityEngine.Rendering.UI.UIFoldout
+    - UnityEngine.Rendering.Volume
     - UnityEngine.Rendering.VolumeProfile
     Unity.RenderPipelines.HighDefinition.Editor.dll:
     - UnityEditor.Rendering.HighDefinition.HDProjectSettings
@@ -349,6 +350,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 1806}
     - Class: 114
+      Script: {instanceID: 2208}
+    - Class: 114
       Script: {instanceID: 2284}
     - Class: 114
       Script: {instanceID: 2916}
@@ -356,6 +359,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 2986}
     - Class: 114
       Script: {instanceID: 3080}
+    - Class: 114
+      Script: {instanceID: 3480}
+    - Class: 114
+      Script: {instanceID: 3542}
     - Class: 114
       Script: {instanceID: 4068}
     - Class: 114
@@ -373,6 +380,8 @@ ScriptsOnlyBuild:
     - Class: 114
       Script: {instanceID: 6526}
     - Class: 114
+      Script: {instanceID: 6678}
+    - Class: 114
       Script: {instanceID: 6842}
     - Class: 114
       Script: {instanceID: 6894}
@@ -382,6 +391,10 @@ ScriptsOnlyBuild:
       Script: {instanceID: 7954}
     - Class: 114
       Script: {instanceID: 8192}
+    - Class: 114
+      Script: {instanceID: 8566}
+    - Class: 114
+      Script: {instanceID: 8728}
     - Class: 114
       Script: {instanceID: 8776}
     - Class: 114
@@ -2445,6 +2458,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.VisualEffectGraph.Runtime.dll
     namespaceName: UnityEngine.VFX.Utility
     className: VFXInputAxisBinder
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: ParrelSync.Example
+    className: CustomArgumentExample
   platform: 19
   scenePathNames:
   - Assets/Scenes/shop.unity

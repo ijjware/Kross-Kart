@@ -16,6 +16,7 @@ public class Heather : MonoBehaviour, IPunInstantiateMagicCallback
     private void Awake()
     {
         instance = this;
+        TimeToStart = Time.fixedTime;
     }
     public int UsTeam = 1;
     public Text UsText;
@@ -26,6 +27,7 @@ public class Heather : MonoBehaviour, IPunInstantiateMagicCallback
 
     public Slider boost;
     public Text timer;
+    public float TimeToStart = 0;
     public int duration = 10;
     public int secs = 0;
     public int mins = 0;
@@ -71,7 +73,7 @@ public class Heather : MonoBehaviour, IPunInstantiateMagicCallback
     private void TimerUpdate()
     {
         //increment timer
-        secs = duration - (int)Time.fixedTime;
+        secs = duration - (int)(Time.fixedTime - TimeToStart);
         mins = secs / 60;
         secs -= (mins * 60);
         string secString = "00";

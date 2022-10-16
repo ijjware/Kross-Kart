@@ -76,7 +76,6 @@ public class Kart : MonoBehaviour/*, IPunObservable*/
     //private float minStuckTime = 1f;
     //public int mashInputs = 0;
 
-   
     void FixedUpdate()
     {
         //the next few lines are part of IPunObservable interface
@@ -294,9 +293,6 @@ public class Kart : MonoBehaviour/*, IPunObservable*/
     //        networkPosition += (this.bod.velocity * lag);
     //    }
     //}
-
-
-
 
     //AYO: unfinished magnetize scripts
 

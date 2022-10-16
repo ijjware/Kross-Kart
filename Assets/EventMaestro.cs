@@ -11,15 +11,24 @@ using Photon.Pun;
 // 9-7 TODO: maybe RPC calls are the simplest way of keeping clients updated on important data?
 public class EventMaestro : MonoBehaviourPunCallbacks
 {
+
+    public static EventMaestro instance;
+    private void Awake()
+    {
+        instance = this;
+    }
     public int EventTeam;
     Color clor;
     public Heather HUD;
    
     public PlayerSorter sort;
 
+    //stored groder data
+    string[,] storedNodes = new string[4,2];
+
     public bool isTimeUp = false;
     //event codes
-    //const byte GraphInstanceEventCode = 7;
+    const byte HostMigrationEventCode = 7;
     //const byte ChangeColorEventCode = 2;
     //const byte GroupingEventCode = 3;
     // public const byte RingEventCode = 4;
@@ -33,20 +42,33 @@ public class EventMaestro : MonoBehaviourPunCallbacks
     private void OnEnable()
     {
         PhotonNetwork.NetworkingClient.EventReceived += OnEvent;
+        PhotonNetwork.AddCallbackTarget(this);
     }
 
     private void OnDisable()
     {
         PhotonNetwork.NetworkingClient.EventReceived -= OnEvent;
+        PhotonNetwork.RemoveCallbackTarget(this);
     }
 
     private void OnEvent(EventData photonEvent)
     {
         if (!PhotonNetwork.IsMasterClient) { return; }
         byte eventCode = photonEvent.Code;
-        
         switch (eventCode)
         {
+            case 1:
+                {
+                    // data[0] = group, data[1] = '''active''' node, data[2] = '''upcoming node'''
+                    object[] data = (object[])photonEvent.CustomData;
+                    int group = (int)data[0];
+                    string active = (string)data[1];
+                    string upcoming = (string)data[2];
+                    storedNodes[group, 0] = active;
+                    storedNodes[group, 1] = upcoming;
+                    //Groder.instance.UpdateActiveNode((string)data[0]);
+                    break;
+                }
             //case 2: Pearlman.SyncTrail(clor); break; 
             case 3: //GroupingEvent: this event should only be recieved by master client, prob groups players 
                 { print("group event got");
@@ -56,12 +78,12 @@ public class EventMaestro : MonoBehaviourPunCallbacks
                     sort.SetGroup(guy.OwnerActorNr, guy);
                     break; 
                 }
-            case 4: //RingEvent
+            case 4: //RingEvent broken scoring event
                 {
                     object[] data2 = (object[])photonEvent.CustomData;
                     Kart karttz = PhotonView.Find((int)data2[1]).GetComponent<Kart>();
                     int points = (int)data2[0];
-                    //print("got " + points + " points");
+                    print("got " + points + " points");
                     //normal_score(karttz.team, points);
                     HUD.PointChange(karttz.team, points);
                     break;
@@ -88,17 +110,13 @@ public class EventMaestro : MonoBehaviourPunCallbacks
                     if (Groder.instance) { Groder.instance.RingDeader(groupa, view); }
                     break;
                 }
-            case 7: //GraphInstanceEvent: sets node graph references on master client change (unwanted)
-                { //print("print");
-                  //object[] data = (object[])photonEvent.CustomData;
-                  //int view = (int)data[0];
-                  //if (PhotonView.Find(view))
-                  //{
-                  //    GameObject graph = PhotonView.Find(view).gameObject;
-                  //    Norm = graph.GetComponent<Norman>();
-                  //    Groder = graph.GetComponent<Groder>();
-                  //    Maestro.instance.nodgraf = Norm;
-                  //    Maestro.instance.grody = Groder;
+            case 7: //HostMigrationEvent: on master client change
+                {
+                    print("host disconnected");
+                    PhotonNetwork.LeaveRoom(false);
+                    //PhotonNetwork.NetworkClientState;
+                   //TODO: fix next line or so
+                    //PhotonNetwork.LoadLevel("shop");
                     break;
                 }
             case 8: //TimeUpEvent
@@ -122,14 +140,18 @@ public class EventMaestro : MonoBehaviourPunCallbacks
         clor = Random.ColorHSV();
     }
 
-    //public override void OnMasterClientSwitched(Player newMasterClient)
-    //{
-    //    print("switch event");
-    //    //TODO: hook it up stupid
-    //    if (PhotonNetwork.IsMasterClient)
-    //    {
-    //        print("new master");
-    //    }
-    //}
+    override public void OnMasterClientSwitched(Player newMasterClient)
+    {
+        print("switch event");
+        object[] content = new object[] { };
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(HostMigrationEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public override void OnLeftRoom()
+    {
+        PhotonNetwork.LoadLevel("shop");
+        base.OnLeftRoom();
+    }
 
 }

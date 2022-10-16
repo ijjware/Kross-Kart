@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.SceneManagement;
-
+using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
 
@@ -25,16 +25,16 @@ public class Launcher : MonoBehaviourPunCallbacks
     {
         isConnecting = true;
         PhotonNetwork.NickName = "mobu"; //playerName.text;
-        if (PhotonNetwork.IsConnected)
-        {
-            print("Joining room...");
-            PhotonNetwork.JoinRandomRoom();
-        } else
-        {
+        //if (PhotonNetwork.IsConnected)
+        //{
+        //    print("Joining room...");
+        //    PhotonNetwork.JoinRandomRoom();
+        //} else
+        //{
             print("connecting...");
             PhotonNetwork.GameVersion = gameVersion;
             PhotonNetwork.ConnectUsingSettings();
-        }
+        //}
     }
 
     // Network Callbacks
@@ -47,7 +47,6 @@ public class Launcher : MonoBehaviourPunCallbacks
         }
     }
 
-
     public override void OnJoinRandomFailed(short returnCode, string message)
     {
         print("failed to join random room...");
@@ -55,7 +54,7 @@ public class Launcher : MonoBehaviourPunCallbacks
         options.MaxPlayers = maxPlayersRoom;
         options.IsOpen = true;
         options.IsVisible = true;
-        options.CleanupCacheOnLeave = false; // ??
+        //options.CleanupCacheOnLeave = false; // ??
         PhotonNetwork.CreateRoom("poo", options);
         //PhotonNetwork.CreateRoom(null, new RoomOptions{ MaxPlayers = this.maxPlayersRoom });
         //base.OnJoinRandomFailed(returnCode, message);
@@ -68,11 +67,19 @@ public class Launcher : MonoBehaviourPunCallbacks
         //base.OnDisconnected(cause);
     }
 
+    public override void OnPlayerEnteredRoom(Player newPlayer)
+    {
+        if (PhotonNetwork.IsMasterClient && PhotonNetwork.CurrentRoom.PlayerCount == 2) // modify this int to change number of players in a game
+        {
+            PhotonNetwork.LoadLevel("tst");
+        }
+    }
+
     public override void OnJoinedRoom()
     {
         base.OnJoinedRoom();
         print("joined room with " + PhotonNetwork.CurrentRoom.PlayerCount + " players");
-        PhotonNetwork.LoadLevel("tst");
+        //PhotonNetwork.LoadLevel("tst");
     }
 
 }

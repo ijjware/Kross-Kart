@@ -62,37 +62,10 @@ public class PlayerMaestro : MonoBehaviourPunCallbacks
                 autokart = p1kar.GetComponent<NPK>();
                 kart.setMaster(this);
                 Setup();
-                //sorter.SetGroup(p1kar.GetPhotonView().OwnerActorNr, p1kar);
-                //kart.setMaster(pMan); TODO maybe replace with master = playermaestro.instance; in kart.cs
-                //kart.setMaster(gameObject.GetComponent<Maestro>());
-                //TODO: this is for sure stupid refactor to take into acct current team member counts
-                //if (numPlayers % 2 == 0)
-                //{
-                //    kart.team = 0;
-
-                //} //RED team
-                //else
-                //{
-                //    kart.team = 1;
-
-                //} //BLU team
                 kart.you = PhotonNetwork.Instantiate("you", startPos, startRot);
                 kart.OG = true;
             }
-
-            //freeze other kart
-            if (PhotonNetwork.CurrentRoom.PlayerCount != 1)
-            {
-                kart.active = false;
-            }
-
         }
-        //doesn't edit gradient of karts on foreign clients that are not yet instantiated
-        //color of trail is different between local instance and remote instances
-        //TODO: figure out whether to leave these as events or make them method calls
-        //SendPlayerJoinEvent();
-        //SendColorEvent();
-        //SendGroupingEvent();
     }
 
     public void Setup()
@@ -101,7 +74,6 @@ public class PlayerMaestro : MonoBehaviourPunCallbacks
         mainCam.LookAt = kart.gameObject.transform;
         driftCam.Follow = kart.gameObject.transform;
         driftCam.LookAt = kart.gameObject.transform;
-        //kart.setMaster(pMan);
     }
 
     private void SendGroupingEvent()

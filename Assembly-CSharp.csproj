@@ -85,11 +85,13 @@
     <Compile Include="Assets\Checkpoint.cs" />
     <Compile Include="Assets\Resources\NetworkedPlayer.cs" />
     <Compile Include="Assets\Launcher.cs" />
+    <Compile Include="Assets\ParrelSync\Examples\CustomArgumentExample.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.xml" />
     <None Include="Assets\Photon\PhotonUnityNetworking\changelog.txt" />
     <None Include="Assets\Photon\PhotonLibs\WebSocket\websocket-sharp.dll" />
+    <None Include="Assets\ParrelSync\VERSION.txt" />
     <None Include="Assets\Photon\PhotonLibs\changes-library.txt" />
     <None Include="Assets\Photon\PhotonUnityNetworking\readme.txt" />
     <None Include="Assets\Photon\PhotonLibs\netstandard2.0\Photon3Unity3D.dll" />
@@ -776,6 +778,10 @@
     <ProjectReference Include="PhotonUnityNetworking.Utilities.Culling.Editor.csproj">
       <Project>{0CB2FA1D-F025-CB05-61ED-9857D8B0E2A1}</Project>
       <Name>PhotonUnityNetworking.Utilities.Culling.Editor</Name>
+    </ProjectReference>
+    <ProjectReference Include="ParrelSync.csproj">
+      <Project>{6F8F4E23-68C7-D0B9-4902-F45FD4CDB0BD}</Project>
+      <Name>ParrelSync</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

@@ -4,6 +4,7 @@ using UnityEngine;
 using ExitGames.Client.Photon;
 using Photon.Realtime;
 using Photon.Pun;
+using System;
 
 //adds and tracks current rings
 // 9-7 TODO: should be able to toggle ring spawning and scoring seperately probably?
@@ -18,7 +19,7 @@ public class Groder : MonoBehaviourPunCallbacks
     public Node[] allNodes;
     public Node activeNode;
     public bool ready = false;
-
+    const byte UpdateActiveNodeEventCode = 1;
     Dictionary<int, Node> dactive = new Dictionary<int, Node>();
     Dictionary<int, Node> dupcoming = new Dictionary<int, Node>();
 
@@ -62,7 +63,7 @@ public class Groder : MonoBehaviourPunCallbacks
             }
         }
         //randomly select from list
-        int index = (int)Random.Range(0f, (float)noxts.Count);
+        int index = (int)UnityEngine.Random.Range(0f, (float)noxts.Count);
         if (index < 0) { index = 0; }
         dactive[group] = next;
         dupcoming[group] = noxts[index];
@@ -71,6 +72,7 @@ public class Groder : MonoBehaviourPunCallbacks
 
     public Node GetNextNode(int group)
     {
+       
         Node next = dupcoming[group];
         foreach (Node nod in next.neighbours)
         {
@@ -109,7 +111,7 @@ public class Groder : MonoBehaviourPunCallbacks
             }
         }
         //pick an valid node
-        int index = (int)Random.Range(0f, (float)uperValids.Count);
+        int index = (int)UnityEngine.Random.Range(0f, (float)uperValids.Count);
         if (index < 0) { index = 0; }
         Node guy = uperValids[index];
         Node nextGuy = guy.neighbours[0];
@@ -141,14 +143,14 @@ public class Groder : MonoBehaviourPunCallbacks
     private void AddRing(int group, Node node)
     {
         activeNode = node;
+        UpdateActiveNodeEvent(group);
         object[] team = new object[3] { 0, 0, 0 };
         team[0] = group;
-        team[1] = 5;
-        team[2] = 4;
+        team[1] = 5; // duration
+        team[2] = 4; //point value
         GameObject newRing = PhotonNetwork.InstantiateRoomObject("Ring", node.transform.position,
             node.transform.rotation, 0, team);
         activeRings[group].Add(newRing);
-        
     }
 
     //what does this do??
@@ -163,26 +165,60 @@ public class Groder : MonoBehaviourPunCallbacks
         }
     }
 
+    //attempts to update active node on all clients through network event
+    private void UpdateActiveNodeEvent(int group)
+    {
+        
+        object[] content = new object[] {group, dactive[group].name, dupcoming[group].name};
+        RaiseEventOptions raiseEventOptions = new RaiseEventOptions { Receivers = ReceiverGroup.All };
+        PhotonNetwork.RaiseEvent(UpdateActiveNodeEventCode, content, raiseEventOptions, SendOptions.SendReliable);
+    }
+
+    public void UpdateActiveNode(string[,] storedNodes)
+    {
+        if (!PhotonNetwork.IsMasterClient) { return; }
+        for (int i =0; i<4; i++)
+        {
+            if(storedNodes[i,0] == "") { continue; }
+            Node node1 = Array.Find(allNodes, node => node.name == storedNodes[i, 0]);
+            dactive[i] = node1;
+            activeNode = node1;
+            dupcoming[i] = Array.Find(allNodes, node => node.name == storedNodes[i, 1]);
+            //foreach (Node nod in allNodes)
+            //{
+            //    if(nod.name == storedNodes[i, 0]) { dactive[i] = nod; activeNode = nod; break; }
+            //}
+            //foreach (Node nod in allNodes)
+            //{
+            //    if (nod.name == storedNodes[i, 1]) { dupcoming[i] = nod; break; }
+            //}
+            //activeNode = storedNodes[i, 0];
+            //dactive[i] = storedNodes[i, 0];
+            //dupcoming[i] = storedNodes[i, 1];
+        }
+        print("update active node to:" + activeNode.name);
+        
+    }
 
     //updates active ring list upon ring death
     public void RingDeader(int group, int num)
     {
-        
-        bool repeat = true;
-        HashSet<GameObject> rings = activeRings[group];
-        while(repeat)
-        {
-            repeat = false;
-            foreach (GameObject rin in rings)
-            {
-                if (!rin)
-                {
-                    rings.Remove(rin);
-                    repeat = true;
-                    break;
-                }
-            }
-        }
+        //    if (!PhotonNetwork.IsMasterClient) { return; }
+        //    bool repeat = true;
+        //    HashSet<GameObject> rings = activeRings[group];
+        //    while(repeat)
+        //    {
+        //        repeat = false;
+        //        foreach (GameObject rin in rings)
+        //        {
+        //            if (!rin)
+        //            {
+        //                rings.Remove(rin);
+        //                repeat = true;
+        //                break;
+        //            }
+        //        }
+        //    }
     }
-    
+
 }
